@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - arcedu1@localhost" uuid="06d2059b-e492-4d9a-ae42-5758ffddb79e">
+    <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
+  </data-source>
+  <data-source name="MySQL - arcedu1@localhost [2]" uuid="9e7cf231-d7f4-4d68-8e31-5a38586049df">
+    <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
+  </data-source>
+</component>

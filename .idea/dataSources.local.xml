@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="MySQL - arcedu1@localhost" uuid="06d2059b-e492-4d9a-ae42-5758ffddb79e">
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>arcedu1.*</schema-pattern>
+      <default-schemas>arcedu1.*</default-schemas>
+    </data-source>
+    <data-source name="MySQL - arcedu1@localhost [2]" uuid="9e7cf231-d7f4-4d68-8e31-5a38586049df">
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>arcedu1.*</schema-pattern>
+      <default-schemas>arcedu1.*</default-schemas>
+    </data-source>
+  </component>
+</project>

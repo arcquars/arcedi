@@ -1,0 +1,19 @@
+// SERVIDOR TELEINF
+SSH SFTP (puedes usar el winscp o si estas en linux directo)
+usua: www@teleinf.upb.edu
+pswd: cesi09
+
+Base de datos para el sistema
+usua: speedclipping
+pswd: Speed10
+http://teleinf.upb.edu/myadmin (para administrar esa BD)
+
+/////////////////////
+// SERVIDOR LIVE
+root@217.160.183.30
+0Nlk2QEF
+
+Base de Datos: speedclipping
+   Usuario: speedclipping
+   Password: 45.j_speeddg466.
+usando el comando: mysql -u speedclipping -p speedclipping

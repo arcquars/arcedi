@@ -1,0 +1,77 @@
+.reset_table, 
+.reset_table table tr,
+.reset_table tr td,
+.reset_table table tbody,
+.reset_table table thead,
+.reset_table table tfoot,
+.reset_table table tr th,
+.reset_table table tfoot tr tf
+{
+    margin:0;
+    padding:0;
+    background:none;
+    border:none;
+    border-collapse:collapse;
+    border-spacing:0;
+    background-image:none;
+}
+
+.table_arcedu{
+	width: 98%;
+}
+
+.arcedi_p{
+	color: #343d44;
+	padding: 0 0;
+	margin: 0 0;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+.arcedi_p_title{
+	color: #343d44;
+	padding: 0 0;
+	margin: 0 0;
+	font-size: 10px;
+	font-weight: 700;
+}
+	
+.arcedi_hr{
+	padding: 0 0;
+	margin: 5px 5px;
+	background: #FFC60B;
+}
+
+.table_arcedi_border{
+	border-bottom: 1px solid black;
+}
+
+.arcedi_p_title{
+	color: #343d44;
+	padding: 0 0;
+	margin: 0 0;
+	font-size: 11px;
+	font-weight: 700;
+}
+
+.p_contrat{
+	font-size: 12px;
+
+	text-align: justify;
+}
+
+.ol_contract{
+	font-size: 12px;
+	text-align: justify;
+}
+
+.td_contrat_firma p{
+	font-size: 13px;
+	padding: 0 0;
+	margin: 0 0;
+}
+
+.p_report_arching{
+	margin-left: 15px !important;
+	font-style: italic;
+}

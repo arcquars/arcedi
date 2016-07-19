@@ -1,0 +1,34 @@
+-- Crear archivo para crear table con migration
+php artisan make:migration create_users_table
+
+-- Ejecutar migration para crear las nuevas tablas
+php artisan migrate
+
+-- Crear Controller
+php artisan make:controller PhotoController
+
+-- Crear Controller restful
+php artisan make:controller --resource NAME_OF_CONTROLLER
+
+-- Crear modelo
+php artisan make:model User
+
+-- Comando para ejecutar migration cuando creamos un nuevo archivo
+php artisan migrate
+
+-- Actualizar clases con composer
+/usr/local/bin/composer/composer.phar dump-autoload
+
+-- Limpiar views
+php artisan view:clear
+-- Limpiar cache
+php artisan cache:clear
+
+-- Para añadir columna a una tabla ya creada
+php artisan make:migration add_paid_to_users --table="environments"
+
+
+LINKS
+<li><a href="{{ url('/login') }}">Login</a></li>
+<li><a href="{{ url('/register') }}">Register</a></li>
+<li><a href="{{ url('/home') }}">Home</a></li>

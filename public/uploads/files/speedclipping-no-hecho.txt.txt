@@ -1,0 +1,6 @@
+1.- Para los nuevos trabajos hacer amarillo hasta categorizar y fondo rojo para speed.
+2.- Para el cliente y admin que recargue la pagina y le de un pitido diciendo que hay algo nuevo.
+3.- Aumentar tamaño pais overview.
+4.- Cambiar la cuenta a speedclipping de payment
+5.- Buscar como subir imagenes en paypal.
+6.- 
