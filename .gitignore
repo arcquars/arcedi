@@ -1,5 +1,8 @@
 composer.phar
-.idea/*
+/.idea/*
+/.idea/*.xml
+/.idea/*.iml
+/.idea/*.ids
 /vendor/
 /.settings/*
 /public/assets/bower/*
