@@ -1,5 +1,9 @@
-/vendor
-/node_modules
-Homestead.yaml
-Homestead.json
-.env
+composer.phar
+/vendor/
+/.settings/*
+/public/assets/bower/*
+/bootstrap/cache/
+.env.*.php
+env.php
+env
+
