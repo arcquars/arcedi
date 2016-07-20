@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTypeUseEnvironments extends Migration
+class AddDdRdToMovements extends Migration
 {
     /**
      * Run the migrations.

@@ -4,6 +4,8 @@
     </a>
     <a class="list-group-item" href="{{ url('/store/buyProducts/') }}">Compra</a>
     <a class="list-group-item" href="{{ url('/store/saleProducts/') }}">Venta</a>
+    <a class="list-group-item" href="{{ url('/store/saleProducts/') }}">Entrega a Tienda</a>
+    <a class="list-group-item" href="{{ url('/store/saleProducts/') }}">Devolucion de Tienda</a>
     <a class="list-group-item" href="{{ url('/store/buyHistoric/') }}">Historial Compras</a>
     <a class="list-group-item" href="{{ url('/store/saleHistoric/') }}">Historial Ventas</a>
     <div style="height: 5px;"></div>

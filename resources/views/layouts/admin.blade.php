@@ -43,7 +43,8 @@
 							<li class="active"><a href="<?php echo url('admin'); ?>"><i
 									class="glyphicon glyphicon-tower"></i></a></li>
 							<li><a href="<?php echo url('expenses'); ?>"><i class="glyphicon glyphicon-briefcase"></i> Pagos</a></li>
-							<li><a href="{{ url('/store') }}"><i class="glyphicon glyphicon-tent"></i> Tienda</a></li>
+							<li><a href="{{ url('/store') }}"><i class="fa fa-truck"></i> Almacen</a></li>
+							<li><a href="{{ url('/store') }}"><i class="fa fa-shopping-cart"></i> Tienda</a></li>
 							<li><a href="{{ url('/bath') }}"><i class="glyphicon glyphicon-usd"></i> Baños</a></li>
 							<li><a href="{{ url('/reports') }}"><i class="glyphicon glyphicon-book"></i> Reportes</a></li>
 							<li><a href="{{ url('/arching') }}"><i class="glyphicon glyphicon-option-vertical"></i> Arqueo</a></li>
