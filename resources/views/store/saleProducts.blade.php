@@ -14,13 +14,15 @@ $dateSale = new DateTime();
       <div class="panel-body">
           <h4>Venta de productos</h4>
           <br>
-          <form method="post" id="fSaleProduct">
+          <form method="post" id="fSaleProduct" class="form-horizontal">
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
-              <div class="row">
-                  <div class="col-md-3" style="text-align: right;"><label for="iNit">Ci:</label></div>
-                  <div class="col-md-3"><input class="form-control" id="iCi" name="nCi" type="number" ></div>
-                  <div class="col-md-3" style="text-align: right;"><label for="nDateSale">Fecha:</label></div>
-                  <div class="col-md-3">
+              <div class="form-group">
+                  <label for="nCi" class="col-sm-2 control-label">Ci</label>
+                  <div class="col-sm-4">
+                      <input class="form-control" id="iCi" name="nCi" type="number" min="0">
+                  </div>
+                  <label for="nDateSale" class="col-sm-2 control-label">Fecha</label>
+                  <div class="col-sm-4">
                       <div class='input-group date' id='dtpDateSale'>
                           <input type='text' class="form-control" name="nDateSale"/>
                             <span class="input-group-addon">
@@ -29,15 +31,17 @@ $dateSale = new DateTime();
                       </div>
                   </div>
               </div>
-              <div class="row">
-                  <div class="col-md-3" style="text-align: right;"><label for="iProvider">Detalle:</label></div>
-                  <div class="col-md-9"><input class="form-control" type="text" id="iProvider" name="nProvider" ></div>
+              <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">Detalle</label>
+                  <div class="col-sm-10">
+                      <input class="form-control" type="text" id="iProvider" name="nProvider" >
+                  </div>
               </div>
               <div class="row">
                   <div class="col-md-12">
                       <input id="hProductSelect" type="hidden" value="" data-id="" data-name="">
                       <div class="input-group">
-                          <input id="iSearch" type="text" class="form-control typeaheadSale" placeholder="Buscar...">
+                          <input id="iSearch" type="text" class="form-control typeaheadSale" placeholder="Buscar..." autocomplete="off">
                         <span class="input-group-btn">
                             <button class="btn btn-default" style="font-size: 20px !important;" type="button" onclick="openNodalAddProduct(); return false;"><span class="fa fa-plus-square-o"></span></button>
                         </span>
@@ -65,7 +69,7 @@ $dateSale = new DateTime();
                   <p id="productError-error" class="error"></p>
               </div>
               <div class="row" style="text-align: right; padding-right: 15px; padding-left: 15px;">
-                  <input type="button" class="btn btn-default" value="Atras">
+                  <input type="button" onclick="redirectByPath('{{ url('store') }}');" class="btn btn-default" value="Atras">
                   <input type="submit" class="btn btn-primary" value="Grabar">
               </div>
           </form>
@@ -120,6 +124,8 @@ $dateSale = new DateTime();
 <script>
 $( document ).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
+    setNavActive(2);
+    setActiveMenuStore($("#dMenuStore"), 2);
 
     $('#mAddProductBuy').on('shown.bs.modal', function () {
         var name = $("#hProductSelect").attr("data-name");
@@ -137,7 +143,8 @@ $( document ).ready(function() {
 
         $("#iProductQuantity").val("");
         $("#iProductQuantity").focus();
-
+        $('#fAddProduct').data('validator', null);
+        $("#fAddProduct").unbind('validate');
         $("#fAddProduct").validate({
             lang: 'es',
             rules: {

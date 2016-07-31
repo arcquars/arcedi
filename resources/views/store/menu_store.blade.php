@@ -1,13 +1,15 @@
-<div id="dMenuStore" class="list-group" style="padding-left: 10px; padding-right: 10px;">
-    <a class="list-group-item menu_title" href="#">
-        Acciones
+<div id="dMenuStore" class="list-group" style="">
+    <a class="list-group-item menu_title" href="{{ url('/store/') }}">
+        Almacen
     </a>
     <a class="list-group-item" href="{{ url('/store/buyProducts/') }}">Compra</a>
     <a class="list-group-item" href="{{ url('/store/saleProducts/') }}">Venta</a>
-    <a class="list-group-item" href="{{ url('/store/saleProducts/') }}">Entrega a Tienda</a>
-    <a class="list-group-item" href="{{ url('/store/saleProducts/') }}">Devolucion de Tienda</a>
+    <a class="list-group-item" href="{{ url('/store/deliveryProducts/') }}">Entrega de Productos</a>
+    <a class="list-group-item" href="{{ url('/store/refundProducts/') }}">Devolucion de Productos</a>
     <a class="list-group-item" href="{{ url('/store/buyHistoric/') }}">Historial Compras</a>
     <a class="list-group-item" href="{{ url('/store/saleHistoric/') }}">Historial Ventas</a>
+    <a class="list-group-item" href="{{ url('/store/deliveryHistoric') }}">Historial Entregas</a>
+    <a class="list-group-item" href="{{ url('/store/refundHistoric/') }}">Historial Devoluciones</a>
     <div style="height: 5px;"></div>
 </div>
 <!-- Modal -->

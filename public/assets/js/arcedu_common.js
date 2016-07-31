@@ -426,3 +426,20 @@ function deleteEnv(env_id){
 		}
 	});
 }
+
+function redirectByPath(href){
+	window.location = href;
+}
+
+function setActiveMenuStore(menu, i){
+	var links = $(menu).find("a");
+
+	$.each(links, function(index, item){
+		$(item).removeClass("active");
+	});
+
+	$.each(links, function(index, item){
+		if(index == i)
+			$(item).addClass("active");
+	});
+}

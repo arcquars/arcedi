@@ -2,7 +2,7 @@
 @section("content")
 <div class="row">
   <div class="col-md-3" style="padding-right: 2px;">
-      @include('store.menu_store')
+      @include('storedetail.menu_storedetail')
   </div>
   <div class="col-md-9" style="padding-left: 2px;">
     <div class="panel panel-default">
@@ -79,8 +79,8 @@
 <script>
 $( document ).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
-    setNavActive(2);
-    setActiveMenuStore($("#dMenuStore"), 6);
+    setNavActive(3);
+    setActiveMenuStore($("#dMenuStore"), 2);
 
     $('#mDetailSale').on('show.bs.modal', function (e) {
         //alert("ssssss: "+$("#ihBuyId").val());

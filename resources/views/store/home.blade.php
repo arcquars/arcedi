@@ -2,7 +2,7 @@
 @section("content")
 <div class="row">
   <div class="col-md-3" style="padding-right: 2px;">
-      @include('store.menu_store')
+          @include('store.menu_store')
   </div>
   <div class="col-md-9" style="padding-left: 2px;">
     <div class="panel panel-default">

@@ -46,6 +46,32 @@ class Product extends Model
 
     }
 
+    public static function getProductByStoryMovementsSaleQuery($query=""){
+        $data = DB::table('products')
+            ->join('store_movements', 'products.product_id', '=', 'store_movements.product_id')
+            ->select(
+                'products.product_id as id',
+                DB::raw("CONCAT(products.name,' || ',products.code, ' || ', store_movements.total, ' || ', products.price_reference)  AS name")
+            )
+            ->where('store_movements.active', '1')->where('products.name','like', '%'.$query.'%')->where('store_movements.total','>', 0)->get();
+
+        return $data;
+
+    }
+
+    public static function getProductByStoreMovements($query=""){
+        $data = DB::table('products')
+            ->join('store_movements', 'products.product_id', '=', 'store_movements.product_id')
+            ->select(
+                'products.product_id as id',
+                DB::raw("CONCAT(products.name,' || ',products.code, ' || ', store_movements.total, ' || ', products.price_reference)  AS name")
+            )
+            ->where('store_movements.active', '1')->where('products.name','like', '%'.$query.'%')->where('store_movements.total','>', 0)->get();
+
+        return $data;
+
+    }
+
     public function movements()
     {
         return $this->hasMany('App\Models\Movements');

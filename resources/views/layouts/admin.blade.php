@@ -16,6 +16,7 @@
 	<link href="/assets/css/font-awesome/css/font-awesome.min.css"
 		  rel="stylesheet">
 <link href="/assets/css/main.css" rel="stylesheet">
+<link href="/assets/css/arcedi.css" rel="stylesheet">
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -44,7 +45,7 @@
 									class="glyphicon glyphicon-tower"></i></a></li>
 							<li><a href="<?php echo url('expenses'); ?>"><i class="glyphicon glyphicon-briefcase"></i> Pagos</a></li>
 							<li><a href="{{ url('/store') }}"><i class="fa fa-truck"></i> Almacen</a></li>
-							<li><a href="{{ url('/store') }}"><i class="fa fa-shopping-cart"></i> Tienda</a></li>
+							<li><a href="{{ url('/storedetail') }}"><i class="fa fa-shopping-cart"></i> Tienda</a></li>
 							<li><a href="{{ url('/bath') }}"><i class="glyphicon glyphicon-usd"></i> Baños</a></li>
 							<li><a href="{{ url('/reports') }}"><i class="glyphicon glyphicon-book"></i> Reportes</a></li>
 							<li><a href="{{ url('/arching') }}"><i class="glyphicon glyphicon-option-vertical"></i> Arqueo</a></li>

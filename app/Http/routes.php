@@ -114,14 +114,29 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/store/getProduct/{product_id?}', 'StoreController@getProduct');
     Route::get('/store/findTypeAhead', 'StoreController@findTypehead');
     Route::get('/store/findTypeAheadSale', 'StoreController@findTypeheadSale');
+    Route::get('/store/findTypeAheadStoreMovements', 'StoreController@findTypeAheadStoreMovements');
     Route::get('/store/buy/{ids?}', 'StoreController@buyByIds');
     Route::get('/store/buyProducts', 'StoreController@buyProducts');
     Route::get('/store/saleProducts', 'StoreController@saleProducts');
+    Route::get('/store/deliveryProducts', 'StoreController@deliveryProducts');
+    Route::get('/store/refundProducts', 'StoreController@refundProducts');
     Route::post('/store/saveBuy', 'StoreController@postSaveBuy');
     Route::post('/store/saveSale', 'StoreController@postSaveSale');
+    Route::post('/store/saveDelivery', 'StoreController@postSaveDelivery');
+    Route::post('/store/saveRefund', 'StoreController@postSaveRefund');
     Route::get('/store/buyHistoric', 'StoreController@buyHistoric');
     Route::get('/store/saleHistoric', 'StoreController@saleHistoric');
+    Route::get('/store/deliveryHistoric', 'StoreController@deliveryHistoric');
+    Route::get('/store/refundHistoric', 'StoreController@refundHistoric');
     Route::post('/store/getDetailButAjax', 'StoreController@getDetailBuyAjax');
     Route::post('/store/getDetailSaleAjax', 'StoreController@getDetailSaleAjax');
+    Route::post('/store/getDetailDeliveryAjax', 'StoreController@getDetailDeliveryAjax');
+    Route::post('/store/getDetailRefundAjax', 'StoreController@getDetailRefundAjax');
+
+    Route::get('/storedetail', 'StoreDetailController@index');
+    Route::get('/storedetail/saleProducts', 'StoreDetailController@saleProducts');
+    Route::get('/storedetail/findTypeAheadSale', 'StoreDetailController@findTypeheadSale');
+    Route::post('/storedetail/saveSale', 'StoreDetailController@postSaveSaledetail');
+    Route::get('/storedetail/saleHistoric', 'StoreDetailController@saleHistoric');
 
 });

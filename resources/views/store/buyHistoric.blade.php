@@ -10,7 +10,8 @@
           <h4>Historial de Compras</h4>
           <div style="height: 10px;"></div>
           <input type="hidden" id="ihBuyId">
-      {!! $grid !!}
+          {!! $filter !!}
+          {!! $grid !!}
       </div>
     </div>
   </div>
@@ -80,6 +81,8 @@
 <script>
 $( document ).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
+    setNavActive(2);
+    setActiveMenuStore($("#dMenuStore"), 5);
 
     $('#mDetailBuy').on('show.bs.modal', function (e) {
         //alert("ssssss: "+$("#ihBuyId").val());

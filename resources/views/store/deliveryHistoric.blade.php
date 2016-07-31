@@ -7,9 +7,9 @@
   <div class="col-md-9" style="padding-left: 2px;">
     <div class="panel panel-default">
       <div class="panel-body">
-          <h4>Historial de Ventas</h4>
+          <h4>Historial de Entregas</h4>
           <div style="height: 10px;"></div>
-          <input type="hidden" id="ihSaleId">
+          <input type="hidden" id="ihDeliveryId">
           {!! $filter !!}
             {!! $grid !!}
       </div>
@@ -17,7 +17,7 @@
   </div>
 </div>
 
-<div id="mDetailSale" class="modal fade" tabindex="-1" role="dialog">
+<div id="mDetailDelivery" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <form id="fBuyDetail">
@@ -42,18 +42,12 @@
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>Precio</th>
                                     <th>Cantidad</th>
-                                    <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
                             </tbody>
                         </table>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-10" style="text-align: right"><p  style="color: #474B03;">TOTAL:</p></div>
-                        <div class="col-md-2"><p id="pSaleTotal"></p></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -80,17 +74,17 @@
 $( document ).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
     setNavActive(2);
-    setActiveMenuStore($("#dMenuStore"), 6);
+    setActiveMenuStore($("#dMenuStore"), 7);
 
-    $('#mDetailSale').on('show.bs.modal', function (e) {
+    $('#mDetailDelivery').on('show.bs.modal', function (e) {
         //alert("ssssss: "+$("#ihBuyId").val());
-        setModelDetailSale($("#ihSaleId").val());
+        setModelDetailDelivery($("#ihDeliveryId").val());
     });
 });
 
-function openViewSaleDetail(bdId){
-    $("#ihSaleId").val(bdId);
-    $("#mDetailSale").modal("show");
+function openViewDeliveryDetail(bdId){
+    $("#ihDeliveryId").val(bdId);
+    $("#mDetailDelivery").modal("show");
 }
 </script>
 @stop()

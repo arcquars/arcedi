@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEditProductPostRequest;
 use App\Http\Requests\StoreProductPostRequest;
 use App\Models\BuyDetail;
+use App\Models\Delivery;
+use App\Models\DeliveryDetail;
 use App\Models\Movements;
 use App\Models\Product;
+use App\Models\Refund;
+use App\Models\RefundDetail;
 use App\Models\Sale;
 use App\Models\SaleDetail;
+use App\Models\StoreMovements;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input as input;
@@ -24,14 +29,24 @@ class StoreController extends Controller
 
     public function index() {
         $filter = \DataFilter::source ( Product::where ( [
-            'delete' => 0
-        ] ) );
+            'products.delete' => 0
+        ] )->where('movements.active', '1')
+            ->join('movements', 'movements.product_id', '=', 'products.product_id')
+            ->select('products.product_id',
+                'products.name',
+                'products.code',
+                'products.price_reference',
+                'movements.total'
+            )
+        );
 
         $grid = \DataGrid::source ( $filter );
+        $grid->attributes(array("class"=>"table table-striped arcedi_table"));
         $grid->add ( 'product_id', 'ID', true )->style ( "width:100px" );
         $grid->add ( 'name', 'Nombre' );
         $grid->add ( 'code', 'Codigo' );
         $grid->add ( 'price_reference', 'Precio' );
+        $grid->add ( 'total', 'Cantidad' );
         $grid->add ( 'busy', 'Acciones' )->cell( function ($value, $row) {
             return
                 '
@@ -41,6 +56,7 @@ class StoreController extends Controller
 
         $grid->row(function ($row) {
             $row->cell('busy')->style("text-align: center;");
+            $row->cell('total')->style("text-align: right;");
         });
 
         $grid->orderBy ( 'product_id', 'asc' );
@@ -56,6 +72,14 @@ class StoreController extends Controller
 
     public function saleProducts() {
         return view ( 'store.saleProducts');
+    }
+
+    public function deliveryProducts() {
+        return view ( 'store.deliveryProducts');
+    }
+
+    public function refundProducts() {
+        return view ( 'store.refundProducts');
     }
 
     public function postNewProduct(StoreProductPostRequest $request1) {
@@ -240,6 +264,27 @@ class StoreController extends Controller
 
     }
 
+    public function findTypeAheadStoreMovements(Request $request)
+    {
+        try {
+
+            $statusCode = 200;
+
+            $source1 = Product::getProductByStoreMovements($request->input('search'));
+            $response = [
+                "source" => $source1,
+            ];
+        } catch ( Exception $e ) {
+            $response = [
+                "error" => "File doesn`t exists"
+            ];
+            $statusCode = 404;
+        } finally{
+            return response ()->json ( $response, $statusCode );
+        }
+
+    }
+
     private function populateProduct($product, $datos) {
         if (isset ( $datos ['code'] ))
             $product->code = $datos ['code'];
@@ -405,14 +450,165 @@ class StoreController extends Controller
         }
     }
 
+    public function postSaveDelivery(Request $request) {
+        try {
+            $valid = true;
+            $statusCode = 200;
+
+            $datos = input::all();
+
+            $products = json_decode($datos['lista'], true);
+
+            $delivery = new Delivery();
+            $delivery->date_delivery = $datos['dateDelivery'];
+            $delivery->detail = $datos['detail'];
+            $delivery->ci = $datos['ci'];
+            $delivery->user_id = Auth::id();
+            $delivery->save();
+
+            foreach($products as $product){
+                $deliveryDetail = new DeliveryDetail();
+
+                $deliveryDetail->amount = $product['quantity'];
+                $deliveryDetail->product_id = $product['id'];
+                $deliveryDetail->delivery_id = $delivery->delivery_id;
+
+                $deliveryDetail->save();
+
+                $movement = Movements::where('product_id', $product['id'])->where('active', 1)->first();
+                $q = 0;
+                if(isset($movement)){
+                    $q = $movement->total;
+                    $movement->active = 0;
+                    $movement->save();
+                }
+
+                $movementNew = new Movements();
+                $movementNew->delivery_detail = $deliveryDetail->dd_id;
+                $movementNew->amount = $product['quantity'];
+                $movementNew->total = $q - $product['quantity'];
+                $movementNew->active = 1;
+                $movementNew->product_id = $product['id'];
+                $movementNew->save();
+
+                $storeM = StoreMovements::where('product_id', $product['id'])->where('active', 1)->first();
+                $qSm = 0;
+                if(isset($storeM)){
+                    $qSm = $storeM->total;
+                    $storeM->active = 0;
+                    $storeM->save();
+                }
+
+                $sm = new StoreMovements();
+                $sm->delivery_detail = $deliveryDetail->dd_id;
+                $sm->amount = $product['quantity'];
+                $sm->total = $qSm + $product['quantity'];
+                $sm->active = 1;
+                $sm->product_id = $product['id'];
+                $sm->save();
+
+            }
+
+            $response = [
+                "data" => $valid
+            ];
+
+        } catch ( Exception $e ) {
+            $response = [
+                "error" => "File doesn`t exists"
+            ];
+            $statusCode = 404;
+        } finally{
+            return response ()->json ( $response, $statusCode );
+        }
+    }
+
+    public function postSaveRefund(Request $request) {
+        try {
+            $valid = true;
+            $statusCode = 200;
+
+            $datos = input::all();
+
+            $products = json_decode($datos['lista'], true);
+
+            $refund = new Refund();
+            $refund->date_refund = $datos['dateDelivery'];
+            $refund->detail = $datos['detail'];
+            $refund->ci = $datos['ci'];
+            $refund->user_id = Auth::id();
+            $refund->save();
+
+            foreach($products as $product){
+                $refundDetail = new RefundDetail();
+
+                $refundDetail->amount = $product['quantity'];
+                $refundDetail->product_id = $product['id'];
+                $refundDetail->refund_id = $refund->refund_id;
+                $refundDetail->save();
+
+                $movement = Movements::where('product_id', $product['id'])->where('active', 1)->first();
+                $q = 0;
+                if(isset($movement)){
+                    $q = $movement->total;
+                    $movement->active = 0;
+                    $movement->save();
+                }
+
+                $movementNew = new Movements();
+                $movementNew->refund_detail = $refundDetail->rd_id;
+                $movementNew->amount = $product['quantity'];
+                $movementNew->total = $q + $product['quantity'];
+                $movementNew->active = 1;
+                $movementNew->product_id = $product['id'];
+                $movementNew->save();
+
+                $storeM = StoreMovements::where('product_id', $product['id'])->where('active', 1)->first();
+                $qSm = 0;
+                if(isset($storeM)){
+                    $qSm = $storeM->total;
+                    $storeM->active = 0;
+                    $storeM->save();
+                }
+
+                $sm = new StoreMovements();
+                $sm->refund_detail = $refundDetail->rd_id;
+                $sm->amount = $product['quantity'];
+                $sm->total = $qSm - $product['quantity'];
+                $sm->active = 1;
+                $sm->product_id = $product['id'];
+                $sm->save();
+
+            }
+
+            $response = [
+                "data" => $valid
+            ];
+
+        } catch ( Exception $e ) {
+            $response = [
+                "error" => "File doesn`t exists"
+            ];
+            $statusCode = 404;
+        } finally{
+            return response ()->json ( $response, $statusCode );
+        }
+    }
+
     public function buyHistoric() {
         $filter = \DataFilter::source ( Buy::where ( [
             'delete' => 0
         ] ) );
 
+        $filter->add('date_buy','YYYY-MM-dd','daterange')->format('Y-m-d', 'en');
+        $filter->submit('buscar');
+        $filter->reset('limpiar');
+        $filter->build();
+
         $grid = \DataGrid::source ( $filter );
+        $grid->attributes(array("class"=>"table table-striped arcedi_table"));
         $grid->add ( 'buy_id', 'ID', true )->style ( "width:100px" );
-        $grid->add ( 'date_buy', 'Fecha Compra' );
+        $grid->add ( 'date_buy|strtotime|date[Y-m-d]', 'Fecha Compra' );
         $grid->add ( 'nit', 'NIT' );
         $grid->add ( 'razon_social', 'R. Social' );
         $grid->add ( 'num_doc', '# documento' );
@@ -438,11 +634,17 @@ class StoreController extends Controller
     public function saleHistoric() {
         $filter = \DataFilter::source ( Sale::where ( [
             'delete' => 0
-        ] ) );
+        ] )->whereNull("store_id") );
+
+        $filter->add('date_sale','YYYY-MM-dd','daterange')->format('Y-m-d', 'en');
+        $filter->submit('buscar');
+        $filter->reset('limpiar');
+        $filter->build();
 
         $grid = \DataGrid::source ( $filter );
+        $grid->attributes(array("class"=>"table table-striped arcedi_table"));
         $grid->add ( 'sale_id', 'ID', true )->style ( "width:100px" );
-        $grid->add ( 'date_sale', 'Fecha Venta' );
+        $grid->add ( 'date_sale|strtotime|date[Y-m-d]', 'Fecha Venta' );
         $grid->add ( 'ci', 'CI' );
         $grid->add ( 'total', 'Total' );
         $grid->add ( 'busy', 'Acciones' )->cell( function ($value, $row) {
@@ -460,6 +662,74 @@ class StoreController extends Controller
         $grid->paginate ( 10 );
 
         return view ( 'store.saleHistoric', compact ( 'filter', 'grid' ) );
+
+    }
+
+    public function deliveryHistoric() {
+        $filter = \DataFilter::source ( Delivery::where ( [
+            'delete' => 0
+        ] ) );
+
+        $filter->add('date_delivery','YYYY-MM-dd','daterange')->format('Y-m-d', 'en');
+        $filter->submit('buscar');
+        $filter->reset('limpiar');
+        $filter->build();
+
+        $grid = \DataGrid::source ( $filter );
+        $grid->attributes(array("class"=>"table table-striped arcedi_table"));
+        $grid->add ( 'delivery_id', 'ID', true )->style ( "width:100px" );
+        $grid->add ( 'date_delivery|strtotime|date[Y-m-d]', 'Fecha Entrega' );
+        $grid->add ( 'detail', 'Detalle' );
+        $grid->add ( 'ci', 'CI' );
+        $grid->add ( 'busy', 'Acciones' )->cell( function ($value, $row) {
+            return
+                '
+                    <a href="#" onclick="openViewDeliveryDetail('.$row->delivery_id.')" data-toggle="tooltip" title="Ver Detalle de entrega"><span class="fa fa-arrows-alt" aria-hidden="true"></span></a>
+                ';
+        })->style("text-align: center;");
+
+        $grid->row(function ($row) {
+            $row->cell('busy')->style("text-align: center;");
+        });
+
+        $grid->orderBy ( 'delivery_id', 'asc' );
+        $grid->paginate ( 10 );
+
+        return view ( 'store.deliveryHistoric', compact ( 'filter', 'grid' ) );
+
+    }
+
+    public function refundHistoric() {
+        $filter = \DataFilter::source ( Refund::where ( [
+            'delete' => 0
+        ] ) );
+
+        $filter->add('date_refund','YYYY-MM-dd','daterange')->format('Y-m-d', 'en');
+        $filter->submit('buscar');
+        $filter->reset('limpiar');
+        $filter->build();
+
+        $grid = \DataGrid::source ( $filter );
+        $grid->attributes(array("class"=>"table table-striped arcedi_table"));
+        $grid->add ( 'refund_id', 'ID', true )->style ( "width:100px" );
+        $grid->add ( 'date_refund|strtotime|date[Y-m-d]', 'Fecha Devolucion' );
+        $grid->add ( 'detail', 'Detalle' );
+        $grid->add ( 'ci', 'CI' );
+        $grid->add ( 'busy', 'Acciones' )->cell( function ($value, $row) {
+            return
+                '
+                    <a href="#" onclick="openViewRefundDetail('.$row->refund_id.')" data-toggle="tooltip" title="Ver Detalle de devolucion"><span class="fa fa-arrows-alt" aria-hidden="true"></span></a>
+                ';
+        })->style("text-align: center;");
+
+        $grid->row(function ($row) {
+            $row->cell('busy')->style("text-align: center;");
+        });
+
+        $grid->orderBy ( 'refund_id', 'asc' );
+        $grid->paginate ( 10 );
+
+        return view ( 'store.refundHistoric', compact ( 'filter', 'grid' ) );
 
     }
 
@@ -497,6 +767,52 @@ class StoreController extends Controller
             $response = [
                 "sale" => $sale,
                 "saleDetail" => $saleDetail
+            ];
+        } catch ( Exception $e ) {
+            $response = [
+                "error" => "File doesn`t exists"
+            ];
+            $statusCode = 404;
+        } finally{
+            return response ()->json ( $response, $statusCode );
+        }
+
+    }
+
+    public function getDetailDeliveryAjax(Request $request) {
+        $datos = input::all ();
+        try {
+            $statusCode = 200;
+            $deliveryId = $datos['delivery_id'];
+            $delivery = Delivery::find($deliveryId);
+
+            $deliveryDetail = DeliveryDetail::getDeliveryDetailWithProduct($deliveryId);
+            $response = [
+                "delivery" => $delivery,
+                "deliveryDetail" => $deliveryDetail
+            ];
+        } catch ( Exception $e ) {
+            $response = [
+                "error" => "File doesn`t exists"
+            ];
+            $statusCode = 404;
+        } finally{
+            return response ()->json ( $response, $statusCode );
+        }
+
+    }
+
+    public function getDetailRefundAjax(Request $request) {
+        $datos = input::all ();
+        try {
+            $statusCode = 200;
+            $refundId = $datos['refund_id'];
+            $refund = Refund::find($refundId);
+
+            $refundDetail = RefundDetail::getRefundDetailWithProduct($refundId);
+            $response = [
+                "refund" => $refund,
+                "refundDetail" => $refundDetail
             ];
         } catch ( Exception $e ) {
             $response = [

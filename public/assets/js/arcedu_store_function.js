@@ -235,7 +235,7 @@ function setMessageError(title, message){
 
 function openNodalAddProduct(){
     var value = $("#hProductSelect").val();
-    if($("#hProductSelect").attr("data-id") === ""){
+    if($("#hProductSelect").attr("data-id") === "" || $("#hProductSelect").attr("data-id") == undefined){
         $(".typeaheadSale").val("");
         alert("Seleccione Producto...");
     }else{
@@ -252,6 +252,14 @@ function addProductTable(table, id, name, code, quantity, price){
     }
 }
 
+function addProductDeliveryTable(table, id, name, code, quantity){
+    if(validProductRow(table, id)){
+        addProductDeliveryTd(table, id, name, code, quantity);
+    }else{
+        alert("El producto "+name+" ya esta en la lista");
+    }
+}
+
 function addProductTd(table, id, name, code, quantity, price){
     var html = "<tr>";
 
@@ -260,6 +268,17 @@ function addProductTd(table, id, name, code, quantity, price){
     html += "<td>"+quantity+"</td>";
     html += "<td>"+price+"</td>";
     html += "<td>"+(quantity * price).toFixed(2)+"</td>";
+    html += "<td><a href='#' onclick='removeTrProduct(this)'><span class='glyphicon glyphicon-trash'></span></a></td>";
+    html += "</tr>";
+
+    $(table).find("tbody").append(html);
+}
+
+function addProductDeliveryTd(table, id, name, code, quantity){
+    var html = "<tr>";
+    html += "<td><input type='hidden' value='"+id+"' >"+name+"</td>";
+    html += "<td>"+code+"</td>";
+    html += "<td>"+quantity+"</td>";
     html += "<td><a href='#' onclick='removeTrProduct(this)'><span class='glyphicon glyphicon-trash'></span></a></td>";
     html += "</tr>";
 
@@ -369,6 +388,74 @@ function saveSale(){
     })
 }
 
+function saveSaleDetail(){
+
+    $.ajax({
+        url: "/storedetail/saveSale",
+        //data: {'obj': modelo.toJSON()},
+        data: {'detail': $("#iProvider").val(),
+            'ci': $("#iCi").val(),
+            'total': $("#sTotalProduct").text(),
+            'dateSale': $("#dtpDateSale").data('date') ,
+            'lista': JSON.stringify(getProductsForCollection($("#tProducts")))},
+        type: "post",
+        contentType: "application/json;charset=utf-8",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        success:function (data) {
+            window.location = '/storedetail';
+        }
+    })
+}
+
+function saveDelivery(){
+
+    $.ajax({
+        url: "/store/saveDelivery",
+        //data: {'obj': modelo.toJSON()},
+        data: {'detail': $("#iProvider").val(),
+            'ci': $("#iCi").val(),
+            'dateDelivery': $("#dtpDateDelivery").data('date') ,
+            'lista': JSON.stringify(getProductsForCollection($("#tProducts")))},
+        type: "post",
+        contentType: "application/json;charset=utf-8",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        //processData: false,
+        success:function (data) {
+            window.location = '/store';
+            //alert(data);
+        }
+    })
+}
+
+function saveRefund(){
+
+    $.ajax({
+        url: "/store/saveRefund",
+        //data: {'obj': modelo.toJSON()},
+        data: {'detail': $("#iDetail").val(),
+            'ci': $("#iCi").val(),
+            'dateDelivery': $("#dtpDateDelivery").data('date') ,
+            'lista': JSON.stringify(getProductsForCollection($("#tProducts")))},
+        type: "post",
+        contentType: "application/json;charset=utf-8",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        //processData: false,
+        success:function (data) {
+            window.location = '/store';
+            //alert(data);
+        }
+    })
+}
+
 function setModelDetailBuy(id){
     $.ajax({
         url: "/store/getDetailButAjax",
@@ -438,6 +525,74 @@ function setModelDetailSale(id){
                 html += "<tr>";
                 html += "<td>"+item.name+"</td>"+"<td style='text-align: right;'>"+item.price_sale+"</td>"+"<td style='text-align: right;'>"+item.amount+"</td>";
                 html += "<td style='text-align: right;'>"+(item.price_sale*item.amount).toFixed(2)+"</td>";
+                html += "</tr>";
+            });
+
+            $("#tProducts tbody").empty();
+            $("#tProducts tbody").append(html);
+        }
+    });
+}
+
+function setModelDetailDelivery(id){
+    $.ajax({
+        url: "/store/getDetailDeliveryAjax",
+        data: {'delivery_id': id},
+        type: "post",
+        dataType: "json",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        success:function (data) {
+            $("#pSaleCi").empty();
+            $("#pSaleCi").append(data.delivery.ci);
+
+            $("#pSaleDate").empty();
+            $("#pSaleDate").append(data.delivery.date_delivery);
+
+            $("#pSaleDetail").empty();
+            $("#pSaleDetail").append(data.delivery.detail);
+
+
+            var html = "";
+            $.each(data.deliveryDetail, function(index, item){
+                html += "<tr>";
+                html += "<td>"+item.name+"</td>"+"<td style='text-align: right;'>"+item.amount+"</td>";
+                html += "</tr>";
+            });
+
+            $("#tProducts tbody").empty();
+            $("#tProducts tbody").append(html);
+        }
+    });
+}
+
+function setModelDetailRefund(id){
+    $.ajax({
+        url: "/store/getDetailRefundAjax",
+        data: {'refund_id': id},
+        type: "post",
+        dataType: "json",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        success:function (data) {
+            $("#pRefundCi").empty();
+            $("#pRefundCi").append(data.refund.ci);
+
+            $("#pRefundDate").empty();
+            $("#pRefundDate").append(data.refund.date_refund);
+
+            $("#pRefundDetail").empty();
+            $("#pRefundDetail").append(data.refund.detail);
+
+
+            var html = "";
+            $.each(data.refundDetail, function(index, item){
+                html += "<tr>";
+                html += "<td>"+item.name+"</td>"+"<td style='text-align: right;'>"+item.amount+"</td>";
                 html += "</tr>";
             });
 

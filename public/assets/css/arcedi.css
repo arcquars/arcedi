@@ -1,0 +1,18 @@
+.arcedi_label{
+    font-size: 0.750em;
+    color: #343d44;
+}
+
+a.list-group-item:focus, a.list-group-item:hover, button.list-group-item:focus, button.list-group-item:hover{
+    background-color: #EBF9EC;
+}
+
+a.list-group-item, button.list-group-item{
+    color: #343d44;
+}
+
+.control-label{
+    color: #343d44;
+    font-size: 0.750em;
+    font-family: 'Dosis', sans-serif;
+}

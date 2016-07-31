@@ -13,7 +13,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: #777;
+  color: #343d44;
   font-weight: 300;
 }
 a {
@@ -674,12 +674,6 @@ textarea#message {
 .input-group-addon{
 	font-size: 12px;
 	padding: 3px 10px;
-}
-
-.control-label{
-	color: #012C4E;
-	font-size: 14px;
-	font-family: 'Dosis', sans-serif;
 }
 
 .btn{

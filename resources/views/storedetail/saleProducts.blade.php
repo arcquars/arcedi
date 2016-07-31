@@ -1,5 +1,5 @@
 <?php
-$dateBuy = new DateTime();
+$dateSale = new DateTime();
 
 //echo "aaaa: ".date_format($dateBuy, 'Y-m-d');
 ?>
@@ -7,45 +7,41 @@ $dateBuy = new DateTime();
 @section("content")
 <div class="row">
   <div class="col-md-3" style="padding-right: 2px;">
-      @include('store.menu_store')
+      @include('storedetail.menu_storedetail')
   </div>
   <div class="col-md-9" style="padding-left: 2px;">
     <div class="panel panel-default">
       <div class="panel-body">
-          <h4>Compra de productos</h4>
+          <h4>Venta de productos de tienda</h4>
           <br>
-          <form method="post" id="fBuyProduct" class="form-horizontal">
+          <form method="post" id="fSaleProduct" class="form-horizontal">
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
               <div class="form-group">
-                  <label for="nProvider" class="col-sm-2 control-label">Proveedor</label>
+                  <label for="nCi" class="col-sm-2 control-label">Ci</label>
                   <div class="col-sm-4">
-                      <input class="form-control" type="text" id="iProvider" name="nProvider" >
-                  </div>
-                  <label for="nDateSale" class="col-sm-2 control-label">Nit</label>
-                  <div class="col-sm-4">
-                      <input class="form-control" id="iNit" type="number" >
-                  </div>
-              </div>
-              <div class="form-group">
-                  <label for="nDoc" class="col-sm-2 control-label"># doc</label>
-                  <div class="col-sm-4">
-                      <input class="form-control" id="iDoc" type="text" name="nDoc">
+                      <input class="form-control" id="iCi" name="nCi" type="number" min="0">
                   </div>
                   <label for="nDateSale" class="col-sm-2 control-label">Fecha</label>
                   <div class="col-sm-4">
-                      <div class='input-group date' id='dtpDateBuy'>
-                          <input type='text' class="form-control" name="nDateBuy"/>
+                      <div class='input-group date' id='dtpDateSale'>
+                          <input type='text' class="form-control" name="nDateSale"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-time"></span>
                             </span>
                       </div>
                   </div>
               </div>
+              <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">Detalle</label>
+                  <div class="col-sm-10">
+                      <input class="form-control" type="text" id="iProvider" name="nProvider" >
+                  </div>
+              </div>
               <div class="row">
                   <div class="col-md-12">
                       <input id="hProductSelect" type="hidden" value="" data-id="" data-name="">
                       <div class="input-group">
-                          <input id="iSearch" type="text" class="form-control typeahead" placeholder="Buscar..." autocomplete="off">
+                          <input id="iSearch" type="text" class="form-control typeaheadSaleDetail" placeholder="Buscar..." autocomplete="off">
                         <span class="input-group-btn">
                             <button class="btn btn-default" style="font-size: 20px !important;" type="button" onclick="openNodalAddProduct(); return false;"><span class="fa fa-plus-square-o"></span></button>
                         </span>
@@ -100,7 +96,7 @@ $dateBuy = new DateTime();
                         </div>
                         <div class="form-group">
                             <label class="arcedi-form-label" for="iPrice">Precio</label>
-                            <input type="text" class="form-control" id="iProductPrice" name="iPrice" placeholder="Precio...">
+                            <input type="text" class="form-control" id="iProductPrice" name="iPrice" placeholder="Precio..." readonly>
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -124,26 +120,50 @@ $dateBuy = new DateTime();
     {{ HTML::script(asset('assets/bower/bs-typeahead/js/bootstrap-typeahead.min.js')) }}
     {{ HTML::script(asset('assets/js/arcedu_common.js')) }}
     {{ HTML::script(asset('assets/js/arcedu_store.js')) }}
+    {{ HTML::script(asset('assets/js/arcedu_storedetail.js')) }}
+    {{ HTML::script(asset('assets/js/arcedu_storedetail_function.js')) }}
     {{ HTML::script(asset('assets/js/arcedu_store_function.js')) }}
 <script>
 $( document ).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
-    setNavActive(2);
+    setNavActive(3);
     setActiveMenuStore($("#dMenuStore"), 1);
 
     $('#mAddProductBuy').on('shown.bs.modal', function () {
         var name = $("#hProductSelect").attr("data-name");
         var code = $("#hProductSelect").attr("data-code");
+        var price = $("#hProductSelect").attr("data-price");
+        var total = $("#hProductSelect").attr("data-total");
         var id = $("#hProductSelect").attr("data-id");
         $("#lProduct").empty();
-        $("#lProduct").append(name);
+        $("#lProduct").append(name+"(max para vender: "+total+")");
         $("#iProductName").val(name);
         $("#iProductCode").val(code);
         $("#iProductId").val(id);
 
+        $("#iProductPrice").val(price);
+
         $("#iProductQuantity").val("");
-        $("#iProductPrice").val("");
         $("#iProductQuantity").focus();
+        $('#fAddProduct').data('validator', null);
+        $("#fAddProduct").unbind('validate');
+        $("#fAddProduct").validate({
+            lang: 'es',
+            rules: {
+                iQuantity: {
+                    required: true,
+                    range: [1, total],
+                    digits: true
+                },
+            },
+            messages: {
+                iQuantity: {
+                    required: "No puede estar vacio",
+                    range: "Numero entre 1 y "+total,
+                    digits: "Solo numeros Enteros"
+                },
+            }
+        });
 
     });
 
@@ -157,7 +177,7 @@ $( document ).ready(function() {
         $("#hProductSelect").attr("data-id", "");
         $("#hProductSelect").attr("data-code", "");
         $("#hProductSelect").val("");
-        $(".typeahead").val("");
+        $(".typeaheadSaleDetail").val("");
 
 
 
@@ -180,12 +200,12 @@ $( document ).ready(function() {
 
     });
 
-    $("#fBuyProduct").submit(function( event ) {
+    $("#fSaleProduct").submit(function( event ) {
         event.preventDefault();
 
-        if($("#fBuyProduct").valid()){
+        if($("#fSaleProduct").valid()){
             if(numRow($("#tProducts")) > 0){
-                saveBuy();
+                saveSaleDetail();
                 //alert("entro al IF: ");
             }else{
                 $("#productError-error").empty();
@@ -199,71 +219,41 @@ $( document ).ready(function() {
     $.validator.methods.twoDigtis = function( value, element ) {
         return this.optional( element ) || /^\d+\.\d{0,2}$/.test( value );
     }
-    $('#fAddProduct').data('validator', null);
-    $("#fAddProduct").unbind('validate');
-    $("#fAddProduct").validate({
+
+
+    $("#fSaleProduct").validate({
         lang: 'es',
         rules: {
-            iQuantity: {
-                required: true,
-                range: [1, 100],
-                digits: true
-            },
-            iPrice: {
-                required: true,
-                range: [1, 100],
-                number: true,
-                twoDigtis: true
-            },
-        },
-        messages: {
-            iQuantity: {
-                required: "No puede estar vacio",
-                range: "Numero entre 1 y 100",
-                digits: "Solo numeros Enteros"
-            },
-            iPrice: {
-                required: "No puede estar vacio",
-                range: "Numero entre 1 y 100",
-                number: "Solo numeros Enteros",
-                twoDigtis: "Solo 2 decimales"
-            },
-
-        }
-    });
-
-    $("#fBuyProduct").validate({
-        lang: 'es',
-        rules: {
-            nProvider: {
+            nCi: {
                 required: true,
             },
-            nDateBuy: {
+            nDateSale: {
                 required: true,
             },
         },
         messages: {
-            nProvider: {
+            nCi: {
                 required: "Nombre del proveedor requerido",
             },
-            nDateBuy: {
+            nDateSale: {
                 required: "Fecha de compra requerido",
             },
 
         }
     });
 
-    var dateBuy = moment("<?php echo date_format($dateBuy, 'Y-m-d'); ?>");
-    var dateBuyMin = moment("<?php echo date_format($dateBuy, 'Y-m-d'); ?>");
-    var dateBuyMax = moment("<?php echo date_format($dateBuy, 'Y-m-d'); ?>");
-    $('#dtpDateBuy').datetimepicker({
+    var dateSale = moment("<?php echo date_format($dateSale, 'Y-m-d'); ?>");
+    var dateSaleMin = moment("<?php echo date_format($dateSale, 'Y-m-d'); ?>");
+    var dateSaleMax = moment("<?php echo date_format($dateSale, 'Y-m-d'); ?>");
+    $('#dtpDateSale').datetimepicker({
         locale: moment.locale('es'),
         format: 'YYYY-MM-DD',
         //viewMode: "months",
-        defaultDate: dateBuy,
-        maxDate: dateBuyMin.add(2, "days"),
-        minDate: dateBuyMax.subtract(1, 'days')
+        defaultDate: dateSale,
+        maxDate: dateSaleMin.add(1, "days"),
+        minDate: dateSaleMax.subtract(1, 'days')
     });
+
 });
 </script>
 @stop()
