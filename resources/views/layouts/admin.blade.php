@@ -155,6 +155,18 @@
 			</div>
         </div>
         <h4 class="arcedu_title1">Ambiente: <%= environmentName %></h4>
+        <div class="form-group">
+        	<label class="col-sm-4 control-label" for="dateContract">F. Contrato:</label>
+			<div class="col-sm-3">
+				<div class='input-group date datetimepickerContract'>
+                    <input type='text' class="form-control" style="font-size:12px;" id="dateContract"  />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+				<em class="error_text_arcedi error_dateContract"></em>
+			</div>
+        </div>
 		<div class="form-group">
 			<label class="col-sm-4 control-label" for="dateStart">F. Inicio:</label>
 			<div class="col-sm-3">
@@ -548,6 +560,18 @@
 			</div>
         </div>
 						<h4 class="arcedu_title1">Ambiente: <%= environmentName %></h4>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="dateContract">F. Contrato:</label>
+							<div class="col-sm-3">
+								<div class='input-group date datetimepickerContract'>
+									<input type='text' class="form-control" style="font-size:12px;" id="dateContract"  />
+									<span class="input-group-addon">
+										<span class="glyphicon glyphicon-calendar"></span>
+									</span>
+								</div>
+								<em class="error_text_arcedi error_dateContract"></em>
+							</div>
+						</div>
 						<div class="form-group">
 							<label class="col-sm-4 control-label" for="dateStart">F. Inicio:</label>
 							<div class="col-sm-3">

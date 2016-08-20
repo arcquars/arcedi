@@ -151,6 +151,12 @@ function openDialogContract(option){
 	    	    var contractMonthView = new ContractMonthView({el:$('#modalContractBody'), model: contractMonth});
 	    	    Backbone.Validation.bind(contractMonthView);
 	    	    contractMonthView.render();
+				$('.datetimepickerContract').datetimepicker({
+					locale: moment.locale('es'),
+					format: 'YYYY-MM-DD',
+					//viewMode: "months",
+					defaultDate: moment()
+				});
 	    	    $('.datetimepickerStart').datetimepicker({
 	    	    	locale: moment.locale('es'),
 	    	    	format: 'YYYY-MM-DD',

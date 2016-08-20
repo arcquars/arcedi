@@ -50,6 +50,12 @@ var ContractTimeModel = Backbone.Model.extend({
         		pattern: 'email',
         		msg: 'Solo Digitos'
         	}],
+			dateContract:
+				function(value) {
+					if(value == ""){
+						return "Fecha Requerida";
+					}
+			},
         	dateStart: 
 	        	function(value) {
 	        		if(value == ""){
@@ -102,6 +108,11 @@ var ContractTimeView = Backbone.View.extend({
     		});
     		
     		var dateRange = modelA.get("dateStart");
+			$('.datetimepickerContract').datetimepicker({
+				locale: moment.locale('es'),
+				format: 'YYYY-MM-DD',
+				minDate: dateRange
+			});
     		$('.datetimepickerStart').datetimepicker({
 			  	locale: moment.locale('es'),
     	    	format: 'YYYY-MM-DD',
@@ -145,6 +156,7 @@ var ContractTimeView = Backbone.View.extend({
 		this.model.set({'last_name_m': $(this.el).find('input#last_name_m').val()});
 		this.model.set({'phone': $(this.el).find('input#phone').val()});
 		this.model.set({'phone_cel': $(this.el).find('input#phone_cel').val()});
+		this.model.set({'dateContract': $(this.el).find('input#dateContract').val()});
 		this.model.set({'dateStart': $(this.el).find('input#dateStart').val()});
 		this.model.set({'alq_hora': $(this.el).find('input#alq_hora').val()});
 		this.model.set({'alq_hora_total': $(this.el).find('input#alq_hora_total').val()});

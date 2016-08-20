@@ -64,6 +64,14 @@ var ContractMonth = Backbone.Model.extend({
         		pattern: 'email',
         		msg: 'Solo Digitos'
         	}],
+			dateContract: [
+			{
+				required: true,
+				msg: 'Fecha requerida'
+			},{
+				pattern: /\d{4}-\d{2}/,
+				msg: 'Formato incorecto'
+			}],
         	dateStart: 
 	        	function(value) {
 	        		if(value == ""){
@@ -225,6 +233,14 @@ var ContractAnti = Backbone.Model.extend({
         		pattern: 'email',
         		msg: 'Solo Digitos'
         	}],
+			dateContract: [
+			{
+				required: true,
+				msg: 'Fecha requerida'
+			},{
+				pattern: /\d{4}-\d{2}/,
+				msg: 'Formato incorecto'
+			}],
         	dateStart: 
 	        	function(value) {
 	        		if(value == ""){
@@ -297,6 +313,7 @@ ContractMonthView = Backbone.View.extend({
          
          this.model.set({'warranty': $(this.el).find('input#warranty').val()});
          this.model.set({'penalty_fee': $(this.el).find('input#penalty_fee').val()});
+		 this.model.set({'dateContract': $(this.el).find('input#dateContract').val()});
          this.model.set({'dateStart': $(this.el).find('input#dateStart').val()});
          this.model.set({'dateEnd': $(this.el).find('input#dateEnd').val()});
          this.model.set({'monthPayment': $(this.el).find('input#monthPayment').val()});
@@ -649,8 +666,17 @@ var ContractAntiView = Backbone.View.extend({
 			  var dateStart = moment(modelA.get('dateStart'), "YYYY-MM-DD");
 			  var dateEnd = moment(modelA.get('dateStart'), "YYYY-MM-DD");
 			  var dateMax = moment(modelA.get('dateStart'), "YYYY-MM-DD");
+			  var dateMinContract = moment(modelA.get('dateStart'), "YYYY-MM-DD");
+			  dateMinContract.subtract(20, 'days');
 			  dateMax.add(3, "years");
 			  dateEnd.add(1, "years");
+			  $('.datetimepickerContract').datetimepicker({
+				  locale: moment.locale('es'),
+				  format: 'YYYY-MM-DD',
+				  defaultDate: dateStart,
+				  maxDate: dateMax,
+				  minDate: dateMinContract
+			  });
 			  $('.datetimepickerStart').datetimepicker({
 				  	locale: moment.locale('es'),
 	    	    	format: 'YYYY-MM-DD',
@@ -694,7 +720,8 @@ var ContractAntiView = Backbone.View.extend({
 		  this.model.set({'phone': $(this.el).find('input#phone').val()});
 	      this.model.set({'phone_cel': $(this.el).find('input#phone_cel').val()});
 	      this.model.set({'email': $(this.el).find('input#email').val()});
-	         
+
+		  this.model.set({'dateContract': $(this.el).find('input#dateContract').val()});
 		  this.model.set({'dateStart': $(this.el).find('input#dateStart').val()});
 		  this.model.set({'dateEnd': $(this.el).find('input#dateEnd').val()});
 		  this.model.set({'anticretico': $(this.el).find('input#anticretico').val()});

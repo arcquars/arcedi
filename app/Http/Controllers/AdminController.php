@@ -548,6 +548,7 @@ class AdminController extends Controller {
 		if ($tipoContract == 2)
 			$contract->rental_h_id = $id;
 		$contract->status = "Vigente";
+		$contract->date_contract = $datos['dateContract'];
 	}
 	private function populateRentalMonth($rentalMonth, $datos) {
 		$rentalMonth->date_admission = date_create_from_format ( 'Y-m-d', $datos ['dateStart'] );
