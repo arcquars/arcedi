@@ -67,11 +67,13 @@ $is_ok = ($FmyFunctions1->numtoletras($paymentM->total));
 					<td>Pago alquiler de <?php echo $paymentM->month_total; ?> meses (<?php echo $paymentM->date_start; ?> al <?php echo $paymentM->date_end; ?>)</td>
 					<td style="text-align: right;"><?php echo $paymentM->payment_rental; ?></td>
 				</tr>
+				<?php if($paymentM->payment_larder > 0){ ?>
 				<tr class="arcedi_p">
 					<td style="text-align: center;">1</td>
 					<td>Pago despensas de <?php echo $paymentM->month_total; ?> meses (<?php echo $paymentM->date_start; ?> al <?php echo $paymentM->date_end; ?>)</td>
 					<td style="text-align: right;"><?php echo $paymentM->payment_larder; ?></td>
 				</tr>
+				<?php }?>
 				<?php $penalty_fee = floatval($paymentM->penalty_fee); ?>
 				<?php if($penalty_fee > 0){  ?>
 				<tr class="arcedi_p">

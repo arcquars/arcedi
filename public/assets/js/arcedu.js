@@ -394,6 +394,7 @@ var PaymentMonthView = Backbone.View.extend({
 		  var view = this;
 		  $(this.$el).on('shown.bs.modal', function (e) {
 			  var dateRange = modelA.get("dateStart1");
+        var dateDd = moment(modelA.get("dateStart"), "YYYY-MM-DD");
 			  if($('.datetimepickerEndM').data("DateTimePicker") !== undefined){
 				  $('.datetimepickerEndM').data("DateTimePicker").destroy();
 				  $('.datetimepickerEndM').datetimepicker({
@@ -402,7 +403,7 @@ var PaymentMonthView = Backbone.View.extend({
 		    	    	viewMode: "months",
 		    	    	defaultDate: dateRange,
 		    	    	maxDate: moment($("#dateEndContract").val(), "YYYY-MM"),
-		    	    	minDate: dateRange
+		    	    	minDate: dateDd.add(1, 'month').calendar()
 				  });
 			  }else{
 				  $('.datetimepickerEndM').datetimepicker({
@@ -411,7 +412,7 @@ var PaymentMonthView = Backbone.View.extend({
 		    	    	viewMode: "months",
 		    	    	defaultDate: dateRange,
 		    	    	maxDate: moment($("#dateEndContract").val(), "YYYY-MM"),
-		    	    	minDate: dateRange
+		    	    	minDate: dateDd.add(1, 'month').calendar()
 				  });
 
 			  }
