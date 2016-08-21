@@ -15,7 +15,7 @@ var ProductModel = Backbone.Model.extend({
             required: true,
             msg: 'Precio requerido'
         },{
-            min: 1,
+            min: 0,
             msg: 'Precio minimo 1'
         }],
         category: {
