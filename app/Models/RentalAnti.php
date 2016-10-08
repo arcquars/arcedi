@@ -27,6 +27,8 @@ class RentalAnti extends Model
 				'contract.contract_id',
 				'rental_anti.anticretico',
 				'rental_anti.date_payment_warranty',
+				'rental_anti.date_admission',
+				'rental_anti.date_end',
 				'environments.code')
 			->where('rental_anti.ra_id', $ra_id)->first();
 

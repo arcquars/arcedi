@@ -37,6 +37,7 @@ class Environment extends Model
                 'contract.rental_m_id',
                 'contract.rental_h_id',
                 'contract.anticrisis_id',
+                'contract.date_contract',
                 'environments.env_id',
                 'environments.flat',
                 'environments.area',

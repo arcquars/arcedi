@@ -41,12 +41,12 @@ $is_ok = ($FmyFunctions1->numtoletras($granTotal));
 						<td>
 							<p class="arcedi_p_title">Nombres: <span class="arcedi_p"><?php echo $person->names." ".$person->last_name_f." ".$person->last_name_m ?></span></p>
 							<p class="arcedi_p_title">CI: <span class="arcedi_p"><?php echo $person->ci." ".$person->expedido; ?></span></p>
-							<p class="arcedi_p_title">Contrato: <span class="arcedi_p"><?php echo $contract->contract_id; ?></span> <span>Hambiente: </span><span class="arcedi_p"><?php echo $environment->code; ?></span></p>
+							<p class="arcedi_p_title">Contrato: <span class="arcedi_p"><?php echo $contract->contract_id; ?></span> <span>Ambiente: </span><span class="arcedi_p"><?php echo $environment->code; ?></span></p>
 							<p></p>
 						</td>
 						<td style="text-align: right;">
 							<p class="arcedi_p_title">Fecha de Contrato: <span class="arcedi_p"><?php echo $rentalTime->created_at; ?></span></p>
-							<p class="arcedi_p_title">Usuario: <span class="arcedi_p">1</span></p>
+							<p class="arcedi_p_title">Usuario: <span class="arcedi_p">{{$name}}</span></p>
 							<p class="arcedi_p">&nbsp;&nbsp;</p>
 						</td>
 					</tr>

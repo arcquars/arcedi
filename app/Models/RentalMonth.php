@@ -31,7 +31,8 @@ class RentalMonth extends Model
 				'contract.contract_id',
 				'rental_month.warranty',
 			'rental_month.date_payment_warranty',
-				'environments.code')
+				'environments.code',
+				'environments.type')
 			->where('rental_month.rm_id', $rm_id)->first();
 
 		return $data;

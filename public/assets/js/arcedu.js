@@ -819,7 +819,8 @@ var PaymentMonthWarrantyView = Backbone.View.extend({
 		"submit form": "doMethod",
 		"click .btn-close": "close"
 	},
-	doMethod: function(){
+	doMethod: function(event){
+		event.preventDefault();
 		savePaymentWMonth(this.model, this.$el);
 	},
 	close: function(){
@@ -1007,7 +1008,7 @@ function savePaymentMonth(modelPaymentMonth, modal){
 	 });
 }
 
-function savePaymentWMonth(modelPaymentWMonth, modal){
+function savePaymentWMonth(modelPaymentWMonth, modale){
 	$.ajax({
 		url: "/admin/paymentWMonth",
 		//data: {'obj': modelo.toJSON()},
@@ -1018,12 +1019,15 @@ function savePaymentWMonth(modelPaymentWMonth, modal){
 			'Content-Type': 'application/x-www-form-urlencoded'
 		},
 		success:function (data) {
-			modal.modal('hide');
-			if(data == "true")
+			if(data == "true"){
+				//alert("grabo correctamente");
 				window.open("/pdf/voucherWarrantyMonth/"+modelPaymentWMonth.get("rm_id"), "_blank");
-				//alert("grabo");
+				console.log("xxxxxxx");
+
+			}
 			else
 				alert("Hubo un error");
+			modale.modal('hide');
 		}
 	});
 }

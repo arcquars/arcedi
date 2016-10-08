@@ -45,7 +45,7 @@ $is_ok = ($FmyFunctions1->numtoletras($rentalMonth->warranty));
           <td style="text-align: right;">
             <p class="arcedi_p_title">Fecha Pago: <span class="arcedi_p" style="font-size: 10px;">{{ $rentalMonth->date_payment_warranty }}</span></p>
             <p class="arcedi_p_title">Usuario: <span class="arcedi_p">{{ $name }}</span></p>
-            <p class="arcedi_p">&nbsp;&nbsp;</p>
+            <p class="arcedi_p_title">Ambiente: <span class="arcedi_p"><?php echo $rentalMonth->code." (".$rentalMonth->type.")"; ?></span></p>
           </td>
         </tr>
       </table>

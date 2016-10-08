@@ -34,7 +34,7 @@ class PdfController extends Controller
 		$data = $this->getData();
 		$date = date('Y-m-d');
 		$invoice = "2222";
-		
+		$name = Auth::user()->name;
 		$arcedi = array(
 				'arcedi_nameCompany' => \Config::get('arcedu.arcedi_nameCompany'),
 				'arcedi_address' => \Config::get('arcedu.arcedi_address'),
@@ -43,7 +43,7 @@ class PdfController extends Controller
 				'arcedi_footer_submessage' => \Config::get('arcedu.arcedi_footer_submessage'),
 		);
 		
-		$view =  \View::make('pdf.voucher', compact('data', 'date', 'invoice', 'arcedi', 'paymentM', 'person', 'dataEnv'))->render();
+		$view =  \View::make('pdf.voucher', compact('data', 'date', 'invoice', 'arcedi', 'paymentM', 'person', 'dataEnv', 'name'))->render();
 		$pdf = \App::make('dompdf.wrapper');
 		$pdf->loadHTML($view);
 		return $pdf->stream('voucher');
@@ -105,7 +105,9 @@ class PdfController extends Controller
 		$person = Person::where('id', "=", $contract->per_id)->first();;
 		$rentalTime = RentalTime::where('rt_id', "=", $contract->rental_h_id)->first();
 		$environment = Environment::where('env_id', "=", $contract->env_id)->first();
-		
+
+		$name = Auth::user()->name;
+
 		$arcedi = array(
 				'arcedi_nameCompany' => \Config::get('arcedu.arcedi_nameCompany'),
 				'arcedi_address' => \Config::get('arcedu.arcedi_address'),
@@ -114,7 +116,7 @@ class PdfController extends Controller
 				'arcedi_footer_submessage' => \Config::get('arcedu.arcedi_footer_submessage'),
 		);
 		
-		$view =  \View::make('pdf.voucherTime', compact('contract', 'rentalTime', 'person', 'arcedi', 'environment'))->render();
+		$view =  \View::make('pdf.voucherTime', compact('contract', 'rentalTime', 'person', 'arcedi', 'environment', 'name'))->render();
 		$pdf = \App::make('dompdf.wrapper');
 		$pdf->loadHTML($view);
 		return $pdf->stream('voucherTime');
@@ -150,12 +152,13 @@ class PdfController extends Controller
 		switch($typeUse){
 			case "commercial":
 				if($environment->rental_m_id != null){
-					$view =  \View::make('pdf.contractCommercialMonth', compact('person', 'arcedi', 'environment', 'piso'))->render();
+					$rentalMonth = RentalMonth::getById($environment->rental_m_id);
+					$view =  \View::make('pdf.contractCommercialMonth', compact('person', 'arcedi', 'environment', 'piso', 'rentalMonth'))->render();
 					$pdf = \App::make('dompdf.wrapper');
 					$pdf->loadHTML($view);
 					return $pdf->stream('contractMonth');
 				}else{
-					$view =  \View::make('pdf.contractCommercialAnti', compact('person', 'arcedi', 'environment', 'piso'))->render();
+					$view =  \View::make('pdf.contractCommercialAnti', compact('person', 'arcedi', '1', 'piso'))->render();
 					$pdf = \App::make('dompdf.wrapper');
 					$pdf->loadHTML($view);
 					return $pdf->stream('contractAnti');
@@ -163,12 +166,14 @@ class PdfController extends Controller
 				break;
 			case "living_place":
 				if(isset($environment->rental_m_id)){
-					$view =  \View::make('pdf.contractLivingMonth', compact('person', 'arcedi', 'environment', 'piso'))->render();
+					$rentalMonth = RentalMonth::getById($environment->rental_m_id);
+					$view =  \View::make('pdf.contractLivingMonth', compact('person', 'arcedi', 'environment', 'piso', 'rentalMonth'))->render();
 					$pdf = \App::make('dompdf.wrapper');
 					$pdf->loadHTML($view);
 					return $pdf->stream('contractMonth');
 				}else{
-					$view =  \View::make('pdf.contractLivingAnti', compact('person', 'arcedi', 'environment', 'piso'))->render();
+					$rentalAnti = RentalAnti::getRentalAntiById($environment->anticrisis_id);
+					$view =  \View::make('pdf.contractLivingAnti', compact('person', 'arcedi', 'environment', 'piso', 'rentalAnti'))->render();
 					$pdf = \App::make('dompdf.wrapper');
 					$pdf->loadHTML($view);
 					return $pdf->stream('contractAnti');
@@ -192,7 +197,7 @@ class PdfController extends Controller
 		$data = $this->getData();
 		$date = date('Y-m-d');
 		$invoice = "2222";
-	
+		$name = Auth::user()->name;
 		$arcedi = array(
 				'arcedi_nameCompany' => \Config::get('arcedu.arcedi_nameCompany'),
 				'arcedi_address' => \Config::get('arcedu.arcedi_address'),
@@ -201,7 +206,7 @@ class PdfController extends Controller
 				'arcedi_footer_submessage' => \Config::get('arcedu.arcedi_footer_submessage'),
 		);
 	
-		$view =  \View::make('pdf.voucherA', compact('data', 'date', 'invoice', 'arcedi', 'paymentA', 'person', 'dataEnv'))->render();
+		$view =  \View::make('pdf.voucherA', compact('data', 'date', 'invoice', 'arcedi', 'paymentA', 'person', 'dataEnv', 'name'))->render();
 		$pdf = \App::make('dompdf.wrapper');
 		$pdf->loadHTML($view);
 		return $pdf->stream('voucherA');

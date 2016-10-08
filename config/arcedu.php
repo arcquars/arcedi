@@ -4,7 +4,7 @@ return  [
 		'dayPenalty' => 10,
 		'arcedi_nameCompany' => 'GUIOT',
 		'arcedi_address' => 'Calle Angostura #1770',
-		'arcedi_contact' => 'cel. 797 92562',
+		'arcedi_contact' => 'cel. 797 92562, tel. 4555121',
 		'arcedi_footer_message' => 'Gracias por pagar puntualmente sus cuentas.',
 		'arcedi_footer_submessage' => 'Cochabamba - Bolivia',
 

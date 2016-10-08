@@ -6,8 +6,12 @@
     {!! Html::style('assets/css/pdf.css') !!}
   </head>
   <body>
+    <?php
+    $date=date_create($environment->date_contract);
+    ?>
     <h5 style="text-align: center;">CONTRATO DE ALQUILER DE LOCAL COMERCIAL</h5>
-    <p class="p_contrat">En………………de…………. de………..</p>
+    <p style="text-align: right;" class="p_contrat">En la ciudad de Cochabamba, <?= date_format($date, "d");?> de <?= date_format($date, "m");?> de <?= date_format($date, "Y");?></p>
+
     <h6>REUNIDOS</h6>
     <p class="p_contrat">De una parte, en concepto de PROPIETARIO, <b><?= $arcedi['arcedi_contract_owner_name'] ?></b> mayor de edad;
       de estado civil <b>{{ $arcedi['arcedi_contract_owner_civil'] }}</b> de profesión <b>{{ $arcedi['arcedi_contract_owner_profesion'] }}</b> con domicilio en <b>{{ $arcedi['arcedi_contract_owner_address'] }}</b> y C.I. <b>{{ $arcedi['arcedi_contract_owner_ci'] }}</b>
@@ -27,17 +31,17 @@
       Este destino no podrá ser alterado sin consentimiento por escrito del PROPIETARIO. El incumplimiento de esta obligación dará derecho al PROPIETARIO para resolver de pleno derecho el contrato.</p>
     <p class="p_contrat"><b>SEGUNDA.-</b>  Se deja expresa constancia que,  EL INQUILINO  no podrá  ceder, transferir, ni subalquilar, total o parcialmente a terceros.</p>
     <h6>DURACIÓN</h6>
-    <p class="p_contrat"><b>TERCERA.-</b> El plazo de duración del alquiler será por UN ano forzoso, y  comenzará a partir del  día 1de mayo 2016  y  terminará el  día 30 de  abril del 2017 sin necesidad de aviso previo.
+    <p class="p_contrat"><b>TERCERA.-</b> El plazo de duración del alquiler será por UN ano forzoso, y  comenzará a partir del <?= $rentalMonth->date_admission; ?>  y  terminará en <?= $rentalMonth->date_end; ?> sin necesidad de aviso previo.
       El Contrato podrá renovarse a su vencimiento, si ambas partes están de acuerdo, para lo cual el INQUILINO deberán informar al  PROPIETARIO de su deseo de renovar el contrato, por escrito con una anticipación no menor de 30 días calendarios a la fecha prevista para la renovación, debiendo constar ésta de documento escrito.</p>
-    <p class="p_contrat"><b>CUARTA.-</b> El plazo de duración comenzará a contarse desde la fecha 1 mayo 2016, en que dicho local se pone a disposición del arrendatario, quien lo recibe, así como las llaves.</p>
+    <p class="p_contrat"><b>CUARTA.-</b> El plazo de duración comenzará a contarse desde la fecha <?= $rentalMonth->date_admission; ?>, en que dicho local se pone a disposición del arrendatario, quien lo recibe, así como las llaves.</p>
     <h6>CANON DE ALQUILER, GARANTIA Y FORMA DE PAGO</h6>
     <p class="p_contrat">De común acuerdo entre partes, se conviene lo siguiente:</p>
-    <p class="p_contrat"><b>QUINTA.-</b> Se fija en concepto de alquiler mensual la suma de   $us…………... (……………………… 00/100 DÓLARES AMERICANOS.-)</p>
+    <p class="p_contrat"><b>QUINTA.-</b> Se fija en concepto de alquiler mensual la suma de   Bs. <?= $rentalMonth->payment; ?></p>
     <p class="p_contrat"><b>SEXTA.-</b> El pago se efectuará en los SIETE  primeros días de cada mes, la cancelación debe realizar  exclusivamente  en ADMINISTRACION en horario de  atención de la  galería.</p>
     <p class="p_contrat"><b>SÉPTIMA.-</b> El alquiler actualizado será exigible al INQUILINO a partir del mes siguiente en que se cumpla el contrato.</p>
     <p class="p_contrat"><b>OCTAVA.-</b>  La <b>FORMA de PAGO </b></p>
     <ol class="ol_contract" type="1">
-      <li>El  INQUILINO, en señal de GARANTÍA hace efectivo a favor del PROPIETARIO  la suma de  $us. SETECIENTOS 00/100 DOLARES AMERICANOS), el mismo que se mantendrá hasta la conclusión del contrato. Dicho monto se constituye en garantía de cumplimiento del contrato y de conservación del inmueble, y le será devuelto al  INQUILINO al vencimiento del contrato y una vez que se hayan cubierto los pagos de alquiler  y se verifique el estado de conservación del inmueble, a satisfacción del PROPIETARIO.</li>
+      <li>El  INQUILINO, en señal de GARANTÍA hace efectivo a favor del PROPIETARIO  la suma de  Bs. <?= $rentalMonth->warranty; ?>, el mismo que se mantendrá hasta la conclusión del contrato. Dicho monto se constituye en garantía de cumplimiento del contrato y de conservación del inmueble, y le será devuelto al  INQUILINO al vencimiento del contrato y una vez que se hayan cubierto los pagos de alquiler  y se verifique el estado de conservación del inmueble, a satisfacción del PROPIETARIO.</li>
       <li>El pago mínimo de  alquiler  es  de  3 meses</li>
       <li>La presente garantía, no podrá tomarse como pago a cuenta por ningún mes, salvo acuerdo posterior de las partes; al cumplimiento del contrato el PROPIETARIO  se compromete restituir al INQUILINO,</li>
     </ol>
@@ -102,8 +106,8 @@
     <p class="p_contrat"><b>VIGESIMOCUARTA.-</b> Este inmueble cuenta con los siguientes beneficios:
       Energía eléctrica, interruptores y enchufes en buen funcionamiento, focos de iluminación alógena; puertas en excelentes funciones con chapas y llaves.</p>
     <h6>ACEPTACION  y  VALIDEZ  DEL  DOCUMENTO</h6>
-    <p class="p_contrat">VIGESIMOQUINTA.- La Sra. OCTAVINA GANDARILLAS CHAVARRIA por una parte como PROPIETARIO, y el señor: ………………………………………………………………………..por otra como INQUILINO, declaran entera conformidad y dan su aceptación a todas y cada una de las cláusulas anteriores , por lo que se otorgan al presente documento toda la validez, al solo reconocimiento y estampado de firmas y rubricas,  ambas partes suscriben este documento en dos ejemplares, cada uno de los cuales se considera como original.</p>
-    <p class="p_contrat" style="text-align: center;">16 de abril de 2016</p>
+    <p class="p_contrat">VIGESIMOQUINTA.- La Sra. OCTAVINA GANDARILLAS CHAVARRIA por una parte como PROPIETARIO, y el señor (a): {{ $person->names." ".$person->last_name_f." ".$person->last_name_m }} por otra como INQUILINO, declaran entera conformidad y dan su aceptación a todas y cada una de las cláusulas anteriores , por lo que se otorgan al presente documento toda la validez, al solo reconocimiento y estampado de firmas y rubricas,  ambas partes suscriben este documento en dos ejemplares, cada uno de los cuales se considera como original.</p>
+    <p class="p_contrat" style="text-align: center;">{{ $environment->date_contract }}</p>
     <div style="height: 40px;"></div>
     <br>
     <table style="width: 100%;">
