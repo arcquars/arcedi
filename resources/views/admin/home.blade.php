@@ -36,6 +36,7 @@
 </div><!-- /.modal -->
 
 <div id="modalG"></div>
+<div id="modal_main" class="modal fade" tabindex="-1" role="dialog"></div>
 
 <div id="modalSelectTypeContract" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog">
@@ -66,6 +67,11 @@
 <script type="text/javascript" src="/assets/js/arcedu_common.js"></script>
 <script type="text/javascript" src="/assets/js/arcedu_chora.js"></script>
 <script type="text/javascript" src="/assets/js/arcedu_env_image.js"></script>
+
+	<script type="text/javascript" src="/assets/js/models/arcedu_extra_payment_m.js"></script>
+	<script type="text/javascript" src="/assets/js/templates/arcedu_extra_payment_t.js"></script>
+	<script type="text/javascript" src="/assets/js/views/arcedu_extra_payment_v.js"></script>
+
 <script>
 $( document ).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
@@ -301,5 +307,31 @@ function dataPaymentAnti(env_id){
 			}
 		});
 	}
+
+function cobroExtra(link){
+	var env_id = $(link).attr("data-id");
+
+	$.ajax({
+		url: "/admin/dataContrac/"+env_id,
+		type: "get",
+		dataType: "json",
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded'
+		},
+		success:function (data) {
+			var model = new ExtraPayment();
+			model.set('env_id', env_id);
+			model.set('ci', data.contract.ci);
+			model.set('names', data.contract.last_name_f);
+			model.set('env_code', data.contract.code);
+			model.set('contract_id', data.contract.contract_id);
+			var view = new ExtraPaymentView({el: $("#modal_main"), 'model': model});
+			Backbone.Validation.bind(view);
+			view.show();
+
+		}
+	});
+}
+
 </script>
 @stop()

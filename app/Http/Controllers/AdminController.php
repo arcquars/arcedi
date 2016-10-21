@@ -68,7 +68,8 @@ class AdminController extends Controller {
                     <a href="#" onclick="viewEnvImages(this); return false;" data-toggle="tooltip" title="Ver ambientes" data-id="' . $row->env_id . '"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span></a>
                     <a href="'.action("PdfController@contract", ['env_id' => $row->env_id]).'" target="_blank" data-toggle="tooltip" title="Ver contrato" data-id="' . $row->env_id . '"><span class="glyphicon glyphicon-book" aria-hidden="true"></span></a>
                     <a href="#" onclick="paymentMonth(this)" data-toggle="tooltip" title="pagos" data-code="' . $row->code . '" data-id="' . $row->env_id . '"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span></a>
-                    <a href="#" onclick="endContract(this)" data-toggle="tooltip" title="Terminar contrato" data-id="' . $row->env_id . '"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+                    <a href="#" onclick="cobroExtra(this)" data-toggle="tooltip" title="Terminar contrato" data-id="' . $row->env_id . '"><span class="fa fa-btc" aria-hidden="true"></span></a>
+                    <a href="#" onclick="endContract(this)" data-toggle="tooltip" title="Cobros Extra" data-id="' . $row->env_id . '"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
                 ' : 
 			// "no revisions for art. {$row->id}";
 			'
@@ -322,6 +323,26 @@ class AdminController extends Controller {
 			return response ()->json ( $response, $statusCode );
 		}
 	}
+
+	public function getDataContracByEnvId($env_id) {
+		try {
+			$contract = Contract::getDataContract( $env_id );
+
+			$statusCode = 200;
+			$response = null;
+			$response = [
+				'contract' => $contract
+			];
+		} catch ( Exception $e ) {
+			$response = [
+				"error" => "File doesn`t exists"
+			];
+			$statusCode = 404;
+		} finally{
+			return response ()->json ( $response, $statusCode );
+		}
+	}
+	
 	public function getPaymentContractMonth($env_id) {
 		try {
 			$dataPaymentMonth = Contract::getDataPaymentMonth ( $env_id );

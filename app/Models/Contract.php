@@ -30,6 +30,20 @@ class Contract extends Model
 		
 		return $data;	
 	}
+
+	public static function getDataContract($env_id){
+		$data = DB::table('contract')
+			->join('environments', 'contract.env_id', '=', 'environments.env_id')
+			->join('persons', 'contract.per_id', '=', 'persons.id')
+			->select(
+				'contract.*',
+				'persons.*',
+				'environments.code')
+			->where('contract.env_id', $env_id)
+			->where('contract.status', 'Vigente')->first();
+
+		return $data;
+	}
 	
 	public static function getDataPaymentTime($env_id, $date){
 		$data = DB::table('contract')

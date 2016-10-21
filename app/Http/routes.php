@@ -44,6 +44,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/admin/grid', 'AdminController@getGrid');
     
     Route::get('/admin/typeRental/{env_id?}', 'AdminController@getRentalPayment');
+    Route::get('/admin/dataContrac/{env_id?}', 'AdminController@getDataContracByEnvId');
     Route::post('/admin/contrato', 'AdminController@postContrato');
     Route::post('/admin/contratoAnti', 'AdminController@postContratoAnti');
     Route::post('/admin/contratoTime', 'AdminController@postContratoTime');
