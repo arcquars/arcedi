@@ -1,8 +1,11 @@
+<?php
+//print_r($env_lates_anti);
+?>
 @extends('layouts.admin')
 @section("content")
 <div class="row">
   <div class="col-md-3" style="padding-right: 2px;">
-    <div id="listEnvironments" class="list-group">
+    <div id="listEnvironments" class="list-group list-group-arcedi">
       <a href="#" class="list-group-item" style="color: #F7FF03; background-color: #474B03; text-align: center">
         Ambientes
       </a>
@@ -12,6 +15,31 @@
       <a href="#" onclick="clickA(this); return false;" class="list-group-item" data-value="Deposito">Depositos</a>
       <a href="#s" onclick="clickA(this); return false;" class="list-group-item" data-value="Area Social">Area Social</a>
     </div>
+	  <ul class="list-group">
+		  <?php if(count($env_lates_month) > 0){ ?>
+		  <li class="list-group-item li_title">
+			  <span>Atrasos contrato mes</span>
+		  </li>
+		  @foreach ($env_lates_month as $env_late)
+			  <li class="list-group-item">
+				  <span class="badge" style="color: red; background-color: #00b5ad;">{{ $env_late['fee'] }}</span>
+				  {{ $env_late['code'] }} dias de mora:
+			  </li>
+		  @endforeach
+		  <?php } ?>
+
+			  <?php if(count($env_lates_anti) > 0){ ?>
+			  <li class="list-group-item li_title">
+				  <span>Atrasos contrato anticrisis</span>
+			  </li>
+			  @foreach ($env_lates_anti as $env_late)
+				  <li class="list-group-item">
+					  <span class="badge" style="color: red; background-color: #00b5ad;">{{ $env_late['fee'] }}</span>
+					  {{ $env_late['code'] }} dias de mora:
+				  </li>
+			  @endforeach
+			  <?php } ?>
+	  </ul>
   </div>
   <div class="col-md-9" style="padding-left: 2px;">
     <div class="panel panel-default">

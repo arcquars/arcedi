@@ -44,7 +44,24 @@ var ExtraPaymentView = Backbone.View.extend({
 
             });
         }else{
-            alert("zzzzzz");
+            savePaymentExtra(modelo.attributes, this.$el);
         }
     }
 });
+
+function savePaymentExtra(model, modal){
+    $.ajax({
+        url: "/admin/paymentExtra",
+        //data: {'obj': modelo.toJSON()},
+        data: model,
+        type: "post",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        success:function (data) {
+            window.open("/pdf/voucherExtra/"+data, "_blank");
+            modal.modal('hide');
+        }
+    });
+}

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Arcedi\Utils;
 use App\Models\EnvImages;
+use App\Models\Extra;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input as input;
 use Illuminate\Http\Response;
 use App\Models\Environment;
@@ -68,8 +71,8 @@ class AdminController extends Controller {
                     <a href="#" onclick="viewEnvImages(this); return false;" data-toggle="tooltip" title="Ver ambientes" data-id="' . $row->env_id . '"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span></a>
                     <a href="'.action("PdfController@contract", ['env_id' => $row->env_id]).'" target="_blank" data-toggle="tooltip" title="Ver contrato" data-id="' . $row->env_id . '"><span class="glyphicon glyphicon-book" aria-hidden="true"></span></a>
                     <a href="#" onclick="paymentMonth(this)" data-toggle="tooltip" title="pagos" data-code="' . $row->code . '" data-id="' . $row->env_id . '"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span></a>
-                    <a href="#" onclick="cobroExtra(this)" data-toggle="tooltip" title="Terminar contrato" data-id="' . $row->env_id . '"><span class="fa fa-btc" aria-hidden="true"></span></a>
-                    <a href="#" onclick="endContract(this)" data-toggle="tooltip" title="Cobros Extra" data-id="' . $row->env_id . '"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+                    <a href="#" onclick="cobroExtra(this)" data-toggle="tooltip" title="Cobros Extra" data-id="' . $row->env_id . '"><span class="fa fa-btc" aria-hidden="true"></span></a>
+                    <a href="#" onclick="endContract(this)" data-toggle="tooltip" title="Terminar contrato" data-id="' . $row->env_id . '"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
                 ' : 
 			// "no revisions for art. {$row->id}";
 			'
@@ -82,19 +85,14 @@ class AdminController extends Controller {
 		// $grid->add('<a href="#" data-id="{{ $id }}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>', '');
 		// $grid->add('<a href="#" data-id="{{ $id }}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>', '');
 		// $grid->edit('/admin/edit', 'Acciones','show|modify|delete');
+		$grid->attributes(array("class" => "table table-striped arcedi_table"));
 		$grid->orderBy ( 'env_id', 'asc' );
 		$grid->paginate ( 10 );
-		/*
-		 * $grid->row(function ($row) {
-		 * if ($row->cell('type')->value == 1) {
-		 * $row->style("background-color:#CCFF66");
-		 * } else{
-		 * $row->cell('type')->style("font-weight:bold");
-		 * $row->style("color:#f00");
-		 * }
-		 * });
-		 */
-		return view ( 'admin.home', compact ( 'filter', 'grid' ) );
+
+		$env_lates_month = Utils::getDiasRetrazadosContratoMes();
+
+		$env_lates_anti = Utils::getDiasRetrazadosContratoAnti();
+		return view ( 'admin.home', compact ( 'filter', 'grid', 'env_lates_month', 'env_lates_anti' ) );
 	}
 	
 	/**
@@ -276,22 +274,20 @@ class AdminController extends Controller {
 		return "true";
 	}
 	
-	
-	public function postPaymentAnti(Request $request) {
+	public function postPaymentExtra(Request $request) {
 		$datos = input::all ();
-		// Crear o actualizar persona
-		$person = Person::getPersonByCiS ( $datos ['ci'] );
-		if (! isset ( $person )) {
-			$person = new Person ();
-		}
-		$this->populatePerson ( $person, $datos );
-		$person->save ();
-	
-		// Creando registro de pago de alquiler por mes
-		$paymentA = new PaymentA();
-		$this->populatePaymentA ( $paymentA, $datos );
-		$paymentA->save ();
-		return $paymentA->id;
+
+		$extra = new Extra();
+		$extra->detail = $datos ['concept'];
+		$extra->total = $datos ['total'];
+		$extra->contract_id = $datos ['contract_id'];
+		$extra->user_id = Auth::user()->id;
+		$extra->date_extra = \Illuminate\Support\Facades\DB::raw ( 'now()' );
+
+		$extra->save();
+
+		return $extra->extra_id;
+		//return 2;
 	}
 	public function getRentalPayment($env_id) {
 		try {
@@ -603,7 +599,7 @@ class AdminController extends Controller {
 		} else {
 			$interval = $date->diff ( $date2 ); // Restamos la Fecha1 menos la Fecha2
 			$seg = $date->getTimestamp () - $date2->getTimestamp ();
-			
+
 			// return $interval->d;
 			return floor ( $seg / (60 * 60 * 24) );
 		}

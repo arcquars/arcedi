@@ -446,20 +446,30 @@
 			<div class="modal-body">
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
 				<div class="alert alert-warning" role="alert">Seleccione el contrato del departamento <b><%= code%></b></div>
-					<div class="dropdown" style="width: 100%;">
-					  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-						Seleccione contrato...
-						<span class="caret"></span>
-					  </button>
-					  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+					  <select name="contract" class="form-control">
+					  	<option value="">Seleccione contrato...</option>
 					  	<%_.each(contracts, function (contract) {%>
-							<li><a href="env/redirectContract/<%=contract.contract_id%>" ><%= contract.contract_id+" - "+contract.status %></a></li>
+							<option value="<%= contract.contract_id %>"><%= contract.contract_id+" - "+contract.status %></option>
 						<%})%>
-					  </ul>
+					  </select>
+					<div class="radio">
+					  <label>
+						<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+						Pagos Normales
+					  </label>
 					</div>
-				<br>
+					<div class="radio">
+					  <label>
+						<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+						Pagos Extra
+					  </label>
+					</div>
+					<div style="width: 100%; text-align: right;">
+					<em class="error"></em>
+					</div>
 			</div>
 			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary">Ver</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 			</div>
 		</form>

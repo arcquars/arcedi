@@ -882,7 +882,7 @@ var ContractHistoryView = Backbone.View.extend({
 		this.$el.modal('show');
 
 		$(this.$el).on('hidden.bs.modal', function (e) {
-			//view.remove();
+
 		});
 
 	},
@@ -898,8 +898,21 @@ var ContractHistoryView = Backbone.View.extend({
 		"submit form": "doMethod",
 		"click .btn-close": "close"
 	},
-	doMethod: function(){
-		savePaymentWAnti(this.model, this.$el);
+	doMethod: function(event){
+		event.preventDefault();
+		var contract = this.$el.find('select');
+		var em = this.$el.find('em.error');
+		em.empty();
+		if(contract.val() == ""){
+			em.append("Elija un contrato.");
+		}else{
+			if(this.$el.find('#optionsRadios1').is(":checked")){
+				window.location = "env/redirectContract/"+contract.val();
+			}else{
+				window.location = "env/redirectContractExtra/"+contract.val();
+			}
+		}
+
 	},
 	close: function(){
 		this.$el.modal('hide');

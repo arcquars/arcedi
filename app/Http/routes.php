@@ -52,6 +52,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/admin/paymentWMonth', 'AdminController@postPaymentWMonth');
     Route::post('/admin/paymentWAnti', 'AdminController@postPaymentWAnti');
     Route::post('/admin/paymentAnti', 'AdminController@postPaymentAnti');
+    Route::post('/admin/paymentExtra', 'AdminController@postPaymentExtra');
     Route::get('/admin/dataRentMonth/{env_id?}', 'AdminController@getPaymentContractMonth');
     Route::get('/admin/dataRentTime/{env_id?}/{date?}', 'AdminController@getPaymentContractTime');
     Route::get('/admin/dataRentAnti/{env_id?}', 'AdminController@getPaymentContractAnti');
@@ -70,6 +71,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/env/upload', 'EnvironmentController@uploadFile');
     Route::delete('/env/{env_image_id}', 'EnvironmentController@destroy');
     Route::get('/env/listContract/{env_id}', 'EnvironmentController@getEnvContract');
+    Route::get('/env/redirectContractExtra/{contract_id}', 'EnvironmentController@paymentContractExtra');
     Route::get('/env/redirectContract/{contract_id}', 'EnvironmentController@redirectContract');
     Route::get('/env/paymentsContractMonth/{contract_id}/{rental_m_id}', 'EnvironmentController@paymentContractMonth');
     Route::get('/env/paymentsContractAnti/{contract_id}/{rental_a_id}', 'EnvironmentController@paymentContractAnti');
@@ -81,6 +83,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/pdf/voucherWarrantyAnti/{ra_id}', 'PdfController@voucherWarantyAnti');
     Route::get('/pdf/voucherTime/{contract_id}', 'PdfController@voucherTime');
     Route::get('/pdf/voucherAnti/{payment_anti}', 'PdfController@voucherAnti');
+    Route::get('/pdf/voucherExtra/{extra_id}', 'PdfController@voucherExtra');
     Route::get('/pdf/contract/{env_id}', 'PdfController@contract');
     Route::get('/pdf/archingReport/{arch_id}', 'PdfController@archingReport');
     

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Arching;
+use App\Models\Extra;
 use App\Models\PaymentM;
 use App\Models\PaymentA;
 use App\Models\Person;
@@ -207,6 +208,26 @@ class PdfController extends Controller
 		);
 	
 		$view =  \View::make('pdf.voucherA', compact('data', 'date', 'invoice', 'arcedi', 'paymentA', 'person', 'dataEnv', 'name'))->render();
+		$pdf = \App::make('dompdf.wrapper');
+		$pdf->loadHTML($view);
+		return $pdf->stream('voucherA');
+	}
+
+	public function voucherExtra($extra_id)
+	{
+		$extraDetail = Extra::getDataForExtra($extra_id);
+		$data = $this->getData();
+		$date = date('Y-m-d');
+		$name = Auth::user()->name;
+		$arcedi = array(
+			'arcedi_nameCompany' => \Config::get('arcedu.arcedi_nameCompany'),
+			'arcedi_address' => \Config::get('arcedu.arcedi_address'),
+			'arcedi_contact' => \Config::get('arcedu.arcedi_contact'),
+			'arcedi_footer_message' => \Config::get('arcedu.arcedi_footer_message'),
+			'arcedi_footer_submessage' => \Config::get('arcedu.arcedi_footer_submessage'),
+		);
+
+		$view =  \View::make('pdf.voucherExtra', compact('data', 'date', 'invoice', 'arcedi', 'extraDetail', 'name'))->render();
 		$pdf = \App::make('dompdf.wrapper');
 		$pdf->loadHTML($view);
 		return $pdf->stream('voucherA');

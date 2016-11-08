@@ -2,6 +2,10 @@
 
 namespace App\Arcedi;
 
+use App\Models\Contract;
+use App\Models\PaymentA;
+use App\Models\PaymentM;
+
 class Utils {
 	public static function formatTimes($string) {
 		$times = explode( "-", $string );
@@ -130,5 +134,89 @@ class Utils {
 		}
 
 		return $html;
+	}
+
+	public static function getDiasRetrazadosContratoMes(){
+		$enviroments1 = Contract::getAllContractMonthVigente();
+
+		$env_late = array();
+		foreach($enviroments1 as $env){
+			//echo $env->code.'; ';
+			$dataPaymentMonth = Contract::getDataPaymentMonth ( $env->env_id );
+			$lastPaymentM = PaymentM::getMaxPaymentByContractId ( $dataPaymentMonth->rental_m_id );
+			$fee = "0";
+
+			$dateNow = new \DateTime ();
+			if (isset ( $lastPaymentM )) {
+				$dateAux = new \DateTime ( $lastPaymentM->date_end );
+				if ($dateNow < $dateAux) {
+					$dateNow = $dateAux;
+				}
+				$fee = Utils::diffdates( $lastPaymentM->date_end );
+			} else {
+				$dateAux = new \DateTime ( $dataPaymentMonth->date_admission );
+				if ($dateNow < $dateAux) {
+					$dateNow = $dateAux;
+				}
+				$fee = Utils::diffdates ( $dataPaymentMonth->date_admission );
+			}
+
+			if($fee > 0){
+				array_push($env_late, array('env_id' => $env->env_id, 'code' => $env->code, 'rental_m_id' => $env->rental_m_id, 'fee' => $fee));
+			}
+		}
+
+
+		return $env_late;
+	}
+
+	public static function getDiasRetrazadosContratoAnti(){
+		$enviroments1 = Contract::getAllContractAntiVigente();
+
+		$env_late = array();
+		foreach($enviroments1 as $env){
+			//echo $env->code.'; ';
+			$dataPaymentAnti = Contract::getDataPaymentAnti( $env->env_id );
+
+			$lastPaymentA = PaymentA::getMaxPaymentByContractId( $dataPaymentAnti->ra_id );
+			$fee = "0";
+
+			$dateNow = new \DateTime ();
+			if (isset ( $lastPaymentA )) {
+				$dateAux = new \DateTime ( $lastPaymentA->date_end );
+				if ($dateNow < $dateAux) {
+					$dateNow = $dateAux;
+				}
+				$fee = Utils::diffdates( $lastPaymentA->date_end );
+			} else {
+				$dateAux = new \DateTime ( $dataPaymentAnti->date_admission );
+				if ($dateNow < $dateAux) {
+					$dateNow = $dateAux;
+				}
+				$fee = Utils::diffdates ( $dataPaymentAnti->date_admission );
+			}
+
+			if($fee > 0){
+				array_push($env_late, array('env_id' => $env->env_id, 'code' => $env->code, 'rental_a_id' => $env->anticrisis_id, 'fee' => $fee));
+			}
+		}
+
+
+		return $env_late;
+	}
+
+	public static function diffdates($date_2) {
+		$date = new \DateTime ();
+		$date2 = new \DateTime ( $date_2 );
+		$date2->modify ( '+6 day' );
+		if ($date <= $date2) {
+			return 0;
+		} else {
+			$interval = $date->diff ( $date2 ); // Restamos la Fecha1 menos la Fecha2
+			$seg = $date->getTimestamp () - $date2->getTimestamp ();
+
+			// return $interval->d;
+			return floor ( $seg / (60 * 60 * 24) );
+		}
 	}
 }

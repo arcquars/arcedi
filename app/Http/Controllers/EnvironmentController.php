@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEnvironmentPostRequest;
 use App\Models\EnvImages;
+use App\Models\Extra;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input as input;
@@ -272,6 +273,35 @@ class EnvironmentController extends Controller
         $person = Person::find($contractModel->per_id);
         $rental_m = RentalMonth::find($rental_m_id);
         return view ( 'environment.contractM', compact("contractModel", "environment", "person", "rental_m", "grid"));
+    }
+
+    public function paymentContractExtra($contract){
+        $filter = \DataFilter::source ( Extra::where ( [
+            'contract_id' => $contract
+        ] ) );
+
+        $grid = \DataGrid::source ( $filter );
+        $grid->add ( 'extra_id', 'ID', true )->style ( "width:100px" );
+        $grid->add ( 'date_extra', 'Fecha de pago' );
+        $grid->add ( 'detail', 'Concepto' );
+        $grid->add ( 'total', 'TOTAL' );
+
+        $grid->add ( 'busy', 'Acciones' )->cell ( function ($value, $row) {
+            return
+                '<a target="_blank" href="'.url('pdf/voucherExtra/'.$row->extra_id).'" data-toggle="tooltip" title="Ver Recibo"><span class="glyphicon glyphicon-file" aria-hidden="true"></span></a>';
+        } );
+
+        // $grid->add('<a href="#" data-id="{{ $id }}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>', '');
+        // $grid->add('<a href="#" data-id="{{ $id }}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>', '');
+        // $grid->edit('/admin/edit', 'Acciones','show|modify|delete');
+        $grid->orderBy ( 'extra_id', 'asc' );
+        $grid->paginate ( 10 );
+
+
+        $contractModel = Contract::find($contract);
+        $environment = Environment::find($contractModel->env_id);
+        $person = Person::find($contractModel->per_id);
+        return view ( 'environment.contractExtra', compact("contractModel", "environment", "person", "grid"));
     }
 
     public function paymentContractAnti($contract, $rental_a_id){
