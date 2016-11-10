@@ -33,4 +33,12 @@ class Extra extends Model
         return $data;
 
     }
+
+    public static function totalExtraBeetwen($dateStart, $dateEnd){
+        $granTotal = Extra::where('date_extra', '>=', $dateStart)->where('date_extra', '<=', $dateEnd)->sum('total');
+        return array(
+            "granTotal" => $granTotal
+
+        );
+    }
 }

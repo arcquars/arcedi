@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ArchingBath;
 use App\Models\BathEntry;
 use App\Models\BathSpending;
+use App\Models\Extra;
 use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
@@ -60,9 +61,15 @@ class ArchingController extends Controller
 		//grid gastos
 		$gridOutgo = $this->getGridOutgo($dateStart, $dateEnd);
 		$totalOutgo = Expense::archingOutgoBeetwen($dateStart, $dateEnd);
+		//grid pagos extra de contratos
+
+		$gridExtra = $this->getGridExtraPaymentContract($dateStart, $dateEnd);
+		$totalExtra = Extra::totalExtraBeetwen($dateStart, $dateEnd);
+
 		//return view('user.profile', ['user' => User::findOrFail($id)]);
 		return view('arching.home', compact ( 
-				'grid', 'gridAnti', 'gridContractTime', 
+				'grid', 'gridAnti', 'gridContractTime',
+				'gridExtra', 'totalExtra',
 				'dateStart', 'dateEnd', 
 				'totalPaymentMonth', 'totalPaymentAnti',
 				'totalContractTime', 'gridContractAnti',
@@ -107,11 +114,13 @@ class ArchingController extends Controller
 		if ($request->isMethod('post')) {
 			$dateEnd = $request->input('i_arch_date_end');
 			$dateStart = $request->input('i_arch_date_start');
-			
+			$total = $request->input('grantotal');
+
 			$arching = new Arching();
 			$arching->date_start = $dateStart;
 			$arching->date_end = $dateEnd;
 			$arching->user_id = $user = Auth::user()->id;
+			$arching->total = $total;
 			$arching->per_id = 1;
 			
 			$arching->save();
@@ -340,6 +349,30 @@ class ArchingController extends Controller
 	
 		$grid->orderBy ( 'created_at', 'asc' );
 	
+		return $grid;
+	}
+
+	private function getGridExtraPaymentContract($dateStart, $dateEnd){
+		$filter = \DataFilter::source ( Extra::where ( [
+			'contract.delete' => 0
+		] )				//->join('contract', 'contract.anticrisis_id', '=', 'rental_anti.ra_id')
+		->where('date_extra', '>=', $dateStart)->where('date_extra', '<=', $dateEnd)
+			->join('contract', 'contract.contract_id', '=', 'extra.contract_id')
+			->join('environments', 'environments.env_id', '=', 'contract.env_id')
+			->select('environments.code as code',
+				'extra.date_extra',
+				'extra.detail',
+				'extra.total')
+		);
+
+		$grid = \DataGrid::source ( $filter );
+		$grid->add ( 'code', 'Codigo' );
+		$grid->add ( 'date_extra', 'Fecha Inicio' );
+		$grid->add ( 'total', 'Cantidad' );
+
+
+		$grid->orderBy ( 'date_extra', 'asc' );
+
 		return $grid;
 	}
 	

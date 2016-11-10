@@ -1,5 +1,6 @@
 <form id="fSaveArchingBath" class="form-inline">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="grantotal" id="ih_granTotal" >
     <div class="form-group">
         <label for="i_arch_date_start">Ultimo Arqueo: </label>
         <div style="display: inline;">

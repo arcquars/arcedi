@@ -12,7 +12,7 @@
 <script type="text/javascript" src="/assets/js/arcedu_common.js"></script>
 <script>
 $( document ).ready(function() {
-	setNavActive(4);
+	setNavActive(5);
 
 });
 </script>

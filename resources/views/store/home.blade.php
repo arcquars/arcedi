@@ -32,6 +32,8 @@
 $( document ).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
 
+    setNavActive(2);
+
 });
 
 function openViewNeWProduct(env_id){

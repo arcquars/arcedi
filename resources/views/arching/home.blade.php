@@ -2,7 +2,7 @@
 <div class="row">
 	<div class="col-md-3" style="padding-right: 2px;">
 		<div class="panel panel-default">
-			@include('arching.menu_arching')
+
 			<hr class="hr_arcedi">
 			<div class="panel-body">
 				<div class="panel panel-default panel-default-arcedi">
@@ -57,6 +57,13 @@
 								<td style="text-align: right;">{!! $totalContractMonth['granTotal'] !!}</td>
 							</tr>
 							<tr>
+								<td colspan="2"><p class="tr_sub_text">Pagos Extra</p><hr class="hr_arc_edi"></td>
+							</tr>
+							<tr>
+								<td>Total: </td>
+								<td style="text-align: right;">{!! $totalExtra['granTotal'] !!}</td>
+							</tr>
+							<tr>
 								<td colspan="2"><p class="tr_sub_text">Gastos</p><hr class="hr_arc_edi"></td>
 							</tr>
 							<tr>
@@ -72,7 +79,8 @@
 								$totalPaymentMonth['totalLarder']+
 								$totalPaymentMonth['totalPenality']+
 								$totalContractTime['granTotal'] + 
-								$totalContractAnti['granTotal'] + 
+								$totalContractAnti['granTotal'] +
+								$totalExtra['granTotal'] +
 								$totalContractMonth['granTotal'] - 
 								$totalOutgo['granTotal']) !!}</td>
 							</tr>
@@ -94,14 +102,16 @@
 						<li role="presentation"><a href="#anti" aria-controls="anti"
 												   role="tab" data-toggle="tab">Anticretico</a></li>
 						<li role="presentation"><a href="#contractTime"
-												   aria-controls="contractTime" role="tab" data-toggle="tab">Contractos
+												   aria-controls="contractTime" role="tab" data-toggle="tab">Contratos
 								Hora</a></li>
 						<li role="presentation"><a href="#contractAnti"
-												   aria-controls="contractAnti" role="tab" data-toggle="tab">Contractos
+												   aria-controls="contractAnti" role="tab" data-toggle="tab">Contratos
 								Anti.</a></li>
 						<li role="presentation"><a href="#contractMonth"
-												   aria-controls="contractMonth" role="tab" data-toggle="tab">Contractos
+												   aria-controls="contractMonth" role="tab" data-toggle="tab">Contratos
 								Mes</a></li>
+						<li role="presentation"><a href="#extraPayment"
+												   aria-controls="extraPayment" role="tab" data-toggle="tab">Pagos Extra</a></li>
 						<li role="presentation"><a href="#outgo" aria-controls="outgo"
 												   role="tab" data-toggle="tab">Gastos</a></li>
 					</ul>
@@ -189,7 +199,7 @@
 							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane" id="contractMonth">
-							<div style="padding: 5px, 10px">
+							<div style="padding: 5px 10px">
 								<div style="padding: 5px 5px;">
 									<table style="width: 100%;">
 										<tr>
@@ -202,6 +212,22 @@
 								</div>
 								<hr class="hr_arcedi">
 								{!! $gridContractMonth !!}
+							</div>
+						</div>
+						<div role="tabpanel" class="tab-pane" id="extraPayment">
+							<div style="padding: 5px, 10px">
+								<div style="padding: 5px 5px;">
+									<table style="width: 100%;">
+										<tr>
+											<td style="text-align: right;"><p>
+													Gran Total: <span>{!! $totalExtra['granTotal']
+																!!}</span>
+												</p></td>
+										</tr>
+									</table>
+								</div>
+								<hr class="hr_arcedi">
+								{!! $gridExtra !!}
 							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane" id="outgo">
@@ -236,10 +262,23 @@ $( document ).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
     $('#datetimepicker1').datetimepicker();
 
-    setNavActive(5);
+    setNavActive(6);
 	setMenuArchingItemActive(0);
 
 	saveArchingEnvironment($("#fSaveArchingBath"));
+
+	//poniendo el gran total para que vaya al form
+	$('#ih_granTotal').val({!! (
+								$totalPaymentAnti['totalLarder']+
+								$totalPaymentAnti['totalPenality']+
+								$totalPaymentMonth['totalRenta']+
+								$totalPaymentMonth['totalLarder']+
+								$totalPaymentMonth['totalPenality']+
+								$totalContractTime['granTotal'] +
+								$totalContractAnti['granTotal'] +
+								$totalExtra['granTotal'] +
+								$totalContractMonth['granTotal'] -
+								$totalOutgo['granTotal']) !!});
 });
 </script>
 @stop()

@@ -49,7 +49,7 @@
 <script type="text/javascript" src="/assets/js/arcedu_bath.js"></script>
 <script>
 $( document ).ready(function() {
-	setNavActive(3);
+	setNavActive(4);
 	setMenuItemActive(0);
 	
 });
