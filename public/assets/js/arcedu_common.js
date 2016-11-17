@@ -301,19 +301,61 @@ function saveArchingBath(form){
 function saveArchingEnvironment(form){
 	$(form).submit(function(e){
 		e.preventDefault();
-		$.ajax({
-			url: "/arching",
-			data: $(form).serialize(),
-			type: "post",
-			dataType: "json",
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded'
-			},
-			success:function (data) {
-				location.reload();
-				//alert(data);
-			}
-		});
+		var errors = validFormching();
+		if(errors.length == 0){
+			$.ajax({
+				url: "/arching",
+				data: $(form).serialize(),
+				type: "post",
+				dataType: "json",
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				success:function (data) {
+					location.reload();
+					//alert(data);
+				}
+			});
+		}else{
+			addErrors(errors, $('#dErrors'));
+		}
+
+	});
+}
+
+function validFormching(){
+	var errors = [];
+	if($('#ih_per_id').val() == ''){
+		errors.push("Seleccione una persona a Entregar");
+	}
+	if($('#ih_granTotal').val() == 0){
+		errors.push("El arqueo tiene que ser mayor a 0");
+	}
+	return errors;
+}
+
+function addErrors(errors, div){
+	div.css('display', 'block');
+	div.empty();
+	for(var i=0; i<errors.length; i++){
+		div.append("<p><span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span><span class='sr-only'>Error:</span> "+errors[i]+"</p>");
+	}
+}
+
+function getPerson(person_id, label, input, hiddenPerId){
+	$.ajax({
+		url: "/person/getPerson",
+		data: {person_id: person_id},
+		type: "get",
+		dataType: "json",
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded'
+		},
+		success:function (data) {
+			label.text("Entregado a: "+data.person.fullname);
+			input.val(data.person.fullname);
+			hiddenPerId.val(data.person.id);
+		}
 	});
 }
 

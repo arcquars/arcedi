@@ -273,7 +273,24 @@ class AdminController extends Controller {
 		$rentalMonth->save();
 		return "true";
 	}
-	
+
+	public function postPaymentAnti(Request $request) {
+		$datos = input::all ();
+		// Crear o actualizar persona
+		$person = Person::getPersonByCiS ( $datos ['ci'] );
+		if (! isset ( $person )) {
+			$person = new Person ();
+		}
+		$this->populatePerson ( $person, $datos );
+		$person->save ();
+
+		// Creando registro de pago de alquiler por mes
+		$paymentA = new PaymentA();
+		$this->populatePaymentA ( $paymentA, $datos );
+		$paymentA->save ();
+		return $paymentA->id;
+	}
+
 	public function postPaymentExtra(Request $request) {
 		$datos = input::all ();
 

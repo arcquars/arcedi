@@ -61,7 +61,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/admin/endContract/{env_id?}', 'AdminController@actionEndContract');
 
     //Route::get('/person', 'PersonController@show');
-    Route::resource('/person', 'PersonController');
+//    Route::resource('/person', 'PersonController');
+    Route::get('/person/getPerson', 'PersonController@getPerson');
 
     Route::get('/env', 'EnvironmentController@index');
     Route::get('/env/new', 'EnvironmentController@newEnv');
@@ -95,9 +96,12 @@ Route::group(['middleware' => ['web']], function () {
     
     // Route arqueos
     Route::get('/arching', 'ArchingController@index');
+    Route::get('/arching/detail/{arch_id?}', array('as' => 'arching.detail','uses' => 'ArchingController@detail'));
     Route::get('/arching/bath', 'ArchingController@actionBath');
     Route::post('/arching', 'ArchingController@saveArching');
     Route::post('/arching/saveArchingBath', 'ArchingController@saveArchingBath');
+
+    Route::get('/arching/autocomple', 'ArchingController@autocomplet');
 
     // Route reportes
     Route::get('/reports', 'ReportsController@index');

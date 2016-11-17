@@ -2,6 +2,7 @@
 <div class="row">
 	<div class="col-md-3" style="padding-right: 2px;">
 		<div class="panel panel-default">
+
 			<hr class="hr_arcedi">
 			<div class="panel-body">
 				<div class="panel panel-default panel-default-arcedi">
@@ -92,7 +93,9 @@
 	<div class="col-md-9" style="padding-left: 2px;">
 		<div class="panel panel-default">
 			<div class="panel-body">
-				@include('arching.form_arching')
+				<h3><i class="fa fa-university" aria-hidden="true"></i> Detalle de Arquero</h3>
+				<div style="height: 5px;"></div>
+				@include('arching.form_arching_disable')
 				<div>
 					<div style="height: 5px;"></div>
 					<ul id="ulAmbientes" class="nav nav-pills nav-justified">
@@ -118,7 +121,7 @@
 					<!-- Tab panes -->
 					<div class="tab-content">
 						<div role="tabpanel" class="tab-pane active" id="meses">
-							<div style="padding: 5px, 10px">
+							<div style="padding: 5px 10px">
 								<div style="padding: 5px 5px;">
 									<table style="width: 100%;">
 										<tr>
@@ -145,7 +148,7 @@
 							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane" id="anti">
-							<div style="padding: 5px, 10px">
+							<div style="padding: 5px 10px">
 								<div style="padding: 5px 5px;">
 									<table style="width: 100%;">
 										<tr>
@@ -168,7 +171,7 @@
 							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane" id="contractTime">
-							<div style="padding: 5px, 10px">
+							<div style="padding: 5px 10px">
 								<div style="padding: 5px 5px;">
 									<table style="width: 100%;">
 										<tr>
@@ -183,7 +186,7 @@
 							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane" id="contractAnti">
-							<div style="padding: 5px, 10px">
+							<div style="padding: 5px 10px">
 								<div style="padding: 5px 5px;">
 									<table style="width: 100%;">
 										<tr>
@@ -214,7 +217,7 @@
 							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane" id="extraPayment">
-							<div style="padding: 5px, 10px">
+							<div style="padding: 5px 10px">
 								<div style="padding: 5px 5px;">
 									<table style="width: 100%;">
 										<tr>
@@ -230,7 +233,7 @@
 							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane" id="outgo">
-							<div style="padding: 5px, 10px">
+							<div style="padding: 5px 10px">
 								<div style="padding: 5px 5px;">
 									<table style="width: 100%;">
 										<tr>
@@ -249,15 +252,14 @@
 						<div class="panel-body">Basic panel example</div>
 					</div>
 				</div>
+				<a href="{{ url('reports/') }}" class="btn btn-primary">Atras</a>
 			</div>
 		</div>
 	</div>
 </div>
 
 @stop() @section("script")
-<link rel="stylesheet" type="text/css" href="/assets/bower/autocomplete.js/dist/autocomplete.css" media="screen" />
 <script type="text/javascript" src="/assets/js/arcedu_common.js"></script>
-<script type="text/javascript" src="/assets/bower/autocomplete.js/dist/autocomplete.min.js"></script>
 <script>
 $( document ).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
@@ -280,18 +282,6 @@ $( document ).ready(function() {
 								$totalExtra['granTotal'] +
 								$totalContractMonth['granTotal'] -
 								$totalOutgo['granTotal']) !!});
-
-	AutoComplete({
-		_Select: function(item){
-			person_id = $(item).attr('data-autocomplete-value');
-			getPerson(person_id, $("#l-user-id"), $("#iAutoComplete"), $('#ih_per_id'));
-		},
-
-	});
-
-	//$('#ih_granTotal').val('0');
-	$('#ih_per_id').val('');
-	$('#iAutoComplete').val('');
 });
 </script>
 @stop()

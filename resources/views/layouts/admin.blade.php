@@ -46,9 +46,18 @@
 							<li><a href="<?php echo url('expenses'); ?>"><i class="glyphicon glyphicon-briefcase"></i> Pagos</a></li>
 							<li><a href="{{ url('/store') }}"><i class="fa fa-truck"></i> Almacen</a></li>
 							<li><a href="{{ url('/storedetail') }}"><i class="fa fa-shopping-cart"></i> Tienda</a></li>
-							<li><a href="{{ url('/bath') }}"><i class="glyphicon glyphicon-usd"></i> Baños</a></li>
-							<li><a href="{{ url('/reports') }}"><i class="glyphicon glyphicon-book"></i> Reportes</a></li>
-							<li><a href="{{ url('/arching') }}"><i class="glyphicon glyphicon-option-vertical"></i> Arqueo</a></li>
+							<li><a href="{{ url('/bath') }}"><i class="fa fa-gg"></i> Baños</a></li>
+							<li>
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-archive" aria-hidden="true"></i> Reportes<span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="{{ url('/reports') }}"><i class="glyphicon glyphicon-book"></i> Reportes Ambientes</a></li></li>
+								</ul>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-usd" aria-hidden="true"></i> Arqueos<span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="{{ url('/arching') }}"><i class="fa fa-university" aria-hidden="true"></i> Arqueo Ambientes</a></li>
+								</ul>
+							</li>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-cog"></span><span class="caret"></span></a>
 								<ul class="dropdown-menu">

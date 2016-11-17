@@ -836,3 +836,13 @@ textarea#message {
 .list-group-arcedi{
   margin-bottom: auto;
 }
+
+.label-arcedi{
+  color: #474b03;
+  font-size: 10px;
+}
+
+.label1-arcedi{
+  color: #A99F03;
+  font-size: 10px;
+}

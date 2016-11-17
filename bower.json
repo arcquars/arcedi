@@ -5,6 +5,7 @@
     "bootstrap": "~3.3.6",
     "backbone": "~1.2.3",
     "underscore": "~1.8.3",
-    "eonasdan-bootstrap-datetimepicker": "~4.17.37"
+    "eonasdan-bootstrap-datetimepicker": "~4.17.37",
+    "autocomplete.js": "2.1.*"
   }
 }

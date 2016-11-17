@@ -6,6 +6,7 @@ use App\Models\ArchingBath;
 use App\Models\BathEntry;
 use App\Models\BathSpending;
 use App\Models\Extra;
+use App\Models\Person;
 use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
@@ -78,6 +79,53 @@ class ArchingController extends Controller
 				'totalOutgo'));
 	}
 
+	public function detail($arch_id) {
+		$arching = Arching::where('arch_id', "=", $arch_id)->first();
+
+		$dateStart = $arching->date_start;
+		$dateEnd = $arching->date_end;
+
+		$person = $arching->person;
+
+		//echo $person->names;
+		//dd($person);
+
+		//grid pagos de contrato alquiler mes
+		$grid = $this->getGridPaymentMonth($dateStart, $dateEnd);
+		$totalPaymentMonth = PaymentM::archingMonthBeetwen($dateStart, $dateEnd);
+		//grid pagos de contrato anticretico
+		$gridAnti = $this->getGridPaymentAnti($dateStart, $dateEnd);
+		$totalPaymentAnti = PaymentA::archingAntiBeetwen($dateStart, $dateEnd);
+		//grid contratos por hora
+		$gridContractTime = $this->getGridContractTime($dateStart, $dateEnd);
+		$totalContractTime = RentalTime::archingContractTimeBeetwen($dateStart, $dateEnd);
+		//grid contrato anticrisis
+		$gridContractAnti = $this->getGridContractAnti($dateStart, $dateEnd);
+		$totalContractAnti = RentalAnti::archingContractAntiBeetwen($dateStart, $dateEnd);
+		//grid contrato mensual
+		$gridContractMonth = $this->getGridContractMonth($dateStart, $dateEnd);
+		$totalContractMonth = RentalMonth::archingContractMonthBeetwen($dateStart, $dateEnd);
+		//grid gastos
+		$gridOutgo = $this->getGridOutgo($dateStart, $dateEnd);
+		$totalOutgo = Expense::archingOutgoBeetwen($dateStart, $dateEnd);
+		//grid pagos extra de contratos
+
+		$gridExtra = $this->getGridExtraPaymentContract($dateStart, $dateEnd);
+		$totalExtra = Extra::totalExtraBeetwen($dateStart, $dateEnd);
+
+		//return view('user.profile', ['user' => User::findOrFail($id)]);
+		return view('arching.detail', compact (
+			'grid', 'gridAnti', 'gridContractTime',
+			'gridExtra', 'totalExtra',
+			'dateStart', 'dateEnd',
+			'totalPaymentMonth', 'totalPaymentAnti',
+			'totalContractTime', 'gridContractAnti',
+			'totalContractAnti', 'gridContractMonth',
+			'totalContractMonth', 'gridOutgo',
+			'person',
+			'totalOutgo'));
+	}
+
 	public function actionBath(Request $request) {
 		$method = $request->method();
 
@@ -115,13 +163,14 @@ class ArchingController extends Controller
 			$dateEnd = $request->input('i_arch_date_end');
 			$dateStart = $request->input('i_arch_date_start');
 			$total = $request->input('grantotal');
+			$per_id = $request->input('per_id');
 
 			$arching = new Arching();
 			$arching->date_start = $dateStart;
 			$arching->date_end = $dateEnd;
 			$arching->user_id = $user = Auth::user()->id;
 			$arching->total = $total;
-			$arching->per_id = 1;
+			$arching->per_id = $per_id;
 			
 			$arching->save();
 			
@@ -175,7 +224,8 @@ class ArchingController extends Controller
 		$grid->add ( 'payment_larder', 'Despensa' );
 		$grid->add ( 'payment_rental', 'Pago Mes' );
 		$grid->add ( 'total', 'Total' );
-		
+
+		$grid->attributes(array("class" => "table table-striped arcedi_table"));
 		$grid->orderBy ( 'payment_date', 'asc' );
 		//$grid->paginate ( 10 );
 			
@@ -200,6 +250,7 @@ class ArchingController extends Controller
 		$grid->add ( 'ci', 'Ci' );
 		$grid->add ( 'amount', 'Cantidad' );
 
+		$grid->attributes(array("class" => "table table-striped arcedi_table"));
 		$grid->orderBy ( 'date_entry', 'asc' );
 		//$grid->paginate ( 10 );
 
@@ -224,6 +275,7 @@ class ArchingController extends Controller
 		$grid->add ( 'code_envoice', '# Factura' );
 		$grid->add ( 'outgo', 'Gasto' );
 
+		$grid->attributes(array("class" => "table table-striped arcedi_table"));
 		$grid->orderBy ( 'date_spending', 'asc' );
 		//$grid->paginate ( 10 );
 
@@ -257,7 +309,8 @@ class ArchingController extends Controller
 		$grid->add ( 'penalty_fee', 'Multa' );
 		$grid->add ( 'payment_larder', 'Despensa' );
 		$grid->add ( 'total', 'Total' );
-	
+
+		$grid->attributes(array("class" => "table table-striped arcedi_table"));
 		$grid->orderBy ( 'payment_date', 'asc' );
 		//$grid->paginate ( 10 );
 			
@@ -291,7 +344,8 @@ class ArchingController extends Controller
 		$grid->add ( 'total', 'Total' )->cell ( function ($value, $row) {
 			return ($row->rental_payment * $row->time_total);
 		} );
-	
+
+		$grid->attributes(array("class" => "table table-striped arcedi_table"));
 		$grid->orderBy ( 'created_at', 'asc' );
 		//$grid->paginate ( 10 );
 			
@@ -318,8 +372,8 @@ class ArchingController extends Controller
 		$grid->add ( 'date_admission', 'Fecha Inicio' );
 		$grid->add ( 'date_end', 'Fecha Fin' );
 		$grid->add ( 'anticretico', 'Anticrisis' );
-		
-	
+
+		$grid->attributes(array("class" => "table table-striped arcedi_table"));
 		$grid->orderBy ( 'created_at', 'asc' );
 				
 		return $grid;
@@ -345,8 +399,8 @@ class ArchingController extends Controller
 		$grid->add ( 'date_admission', 'Fecha Inicio' );
 		$grid->add ( 'date_end', 'Fecha Fin' );
 		$grid->add ( 'warranty', 'Garantia' );
-	
-	
+
+		$grid->attributes(array("class" => "table table-striped arcedi_table"));
 		$grid->orderBy ( 'created_at', 'asc' );
 	
 		return $grid;
@@ -370,7 +424,7 @@ class ArchingController extends Controller
 		$grid->add ( 'date_extra', 'Fecha Inicio' );
 		$grid->add ( 'total', 'Cantidad' );
 
-
+		$grid->attributes(array("class" => "table table-striped arcedi_table"));
 		$grid->orderBy ( 'date_extra', 'asc' );
 
 		return $grid;
@@ -395,10 +449,33 @@ class ArchingController extends Controller
 		$grid->add ( 'expense', 'Gasto' );
 		$grid->add ( 'amount', 'Cantidad' );
 		$grid->add ( 'total', 'Total' );
-	
-	
+
+		$grid->attributes(array("class" => "table table-striped arcedi_table"));
 		$grid->orderBy ( 'date_expense', 'asc' );
 	
 		return $grid;
+	}
+
+	public function autocomplet(Request $request){
+		$search = $request->input('q');
+		$list = null;
+		try {
+			$list = Person::searchAutoComplete($search);
+//			$result = array('1' => 'pedro', '2' => 'angel', '3' => 'domingo', '4' => 'murillo');
+			$statusCode = 200;
+			$response = null;
+			$response = [
+				'result' => $list
+			];
+		} catch ( Exception $e ) {
+			$response = [
+				"error" => "File doesn`t exists"
+			];
+			$statusCode = 404;
+		} finally{
+			//return response ()->json ( $response, $statusCode );
+			return response ()->json($list);
+		}
+
 	}
 }

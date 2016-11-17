@@ -97,4 +97,25 @@ class PersonController extends Controller
     {
         //
     }
+
+    public function getPerson(Request $request){
+        $person_id = $request->input('person_id');
+        try {
+            $person = Person::getPersonById($person_id);
+
+            $statusCode = 200;
+            $response = null;
+            $response = [
+                'person' => $person
+            ];
+        } catch ( Exception $e ) {
+            $response = [
+                "error" => "File doesn`t exists"
+            ];
+            $statusCode = 404;
+        } finally{
+            return response ()->json ( $response, $statusCode );
+        }
+
+    }
 }
