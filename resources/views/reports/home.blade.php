@@ -20,7 +20,8 @@ $( document ).ready(function() {
 
 });
 	function openArchingReport(link){
-		alert($(link).attr("data-id"));
+		var id = $(link).attr("data-id")
+		var win = window.open("<?php echo url('pdf/archingReport'); ?>/"+id, "_blank")
 	}
 
 	function openViewReport(link){

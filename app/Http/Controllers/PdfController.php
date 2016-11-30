@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Arching;
+use App\Models\Expense;
 use App\Models\Extra;
 use App\Models\PaymentM;
 use App\Models\PaymentA;
@@ -234,12 +235,23 @@ class PdfController extends Controller
 	}
 
 	public function archingReport($arch_id){
-		$arching = Arching::where('delete', "=", 1)->where("arch_id", "=", $arch_id)->first();
+		$arching = Arching::where("arch_id", "=", $arch_id)->first();
 		$person = Person::where("id", "=", $arching->per_id)->first();
 
 		//dd($person->id);
 		$user = Auth::user();
 
+		$totalPaymentMonth = PaymentM::archingMonthBeetwen($arching->date_start, $arching->date_end);
+		$totalPaymentAnti = PaymentA::archingAntiBeetwen($arching->date_start, $arching->date_end);
+		$totalContractTime = RentalTime::archingContractTimeBeetwen($arching->date_start, $arching->date_end);
+		$totalContractAnti = RentalAnti::archingContractAntiBeetwen($arching->date_start, $arching->date_end);
+		$totalContractMonth = RentalMonth::archingContractMonthBeetwen($arching->date_start, $arching->date_end);
+		$totalOutgo = Expense::archingOutgoBeetwen($arching->date_start, $arching->date_end);
+		$totalExtra = Extra::totalExtraBeetwen($arching->date_start, $arching->date_end);
+
+		$granTOTAL = $totalPaymentMonth['granTotal']+$totalPaymentAnti['granTotal']+
+			$totalContractTime['granTotal']+$totalContractAnti['granTotal']+$totalContractMonth['granTotal']+
+			$totalExtra['granTotal']-$totalOutgo['granTotal'];
 		$arcedi = array(
 			'arcedi_nameCompany' => \Config::get('arcedu.arcedi_nameCompany'),
 			'arcedi_address' => \Config::get('arcedu.arcedi_address'),
@@ -248,7 +260,13 @@ class PdfController extends Controller
 			'arcedi_footer_submessage' => \Config::get('arcedu.arcedi_footer_submessage'),
 		);
 
-		$view =  \View::make('pdf.archingR', compact('arching',"person", "arcedi", "user"))->render();
+		$view =  \View::make('pdf.archingR', compact(
+			'arching',"person",
+			"arcedi", "user",
+			"totalPaymentMonth", 'totalPaymentAnti',
+			"totalContractTime", "totalContractAnti",
+			"totalContractMonth", 'totalOutgo',
+			"totalExtra", "granTOTAL"))->render();
 		$pdf = \App::make('dompdf.wrapper');
 		$pdf->loadHTML($view);
 		return $pdf->stream('archingR');

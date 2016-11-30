@@ -37,9 +37,9 @@ $FmyFunctions1 = new \App\Arcedi\Arcedi();
 					</tr>
 					<tr>
 						<td>
-							<p class="arcedi_p_title">Nombres: <span class="arcedi_p"><?php echo $person->names." ".$person->last_name_f." ".$person->last_name_m ?></span></p>
+							<p class="arcedi_p_title">Antregado a: <span class="arcedi_p"><?php echo $person->names." ".$person->last_name_f." ".$person->last_name_m ?></span></p>
 							<p class="arcedi_p_title">CI: <span class="arcedi_p"><?php echo $person->ci." ".$person->expedido; ?></span></p>
-							<p></p>
+							<p class="arcedi_p_title">del <span class="arcedi_p"><?php echo $arching->date_start." al ".$arching->date_end; ?></span></p>
 						</td>
 						<td style="text-align: right;">
 							<p class="arcedi_p_title">Fecha Arqueo: <span class="arcedi_p"><?php echo $arching->date_end; ?></span></p>
@@ -60,62 +60,56 @@ $FmyFunctions1 = new \App\Arcedi\Arcedi();
 					<th class="table_arcedi_border arcedi_p_title" style="text-align: center; width: 40%;">Total</th>
 				</tr>
 				<tr class="arcedi_p">
-					<td colspan="2"><p><b>Alquileres Mensuales</b></p></td>
+					<td><p><b>Alquileres Mensuales</b></p></td>
+					<td class="table_arcedi_border td_total"><b>{{ $totalPaymentMonth['granTotal'] }}</b></td>
 				</tr>
 				<tr class="arcedi_p">
 					<td class="table_arcedi_border p_report_arching">Multas</td>
-					<td class="table_arcedi_border">0.00</td>
+					<td class="table_arcedi_border td_subtotal">{{ $totalPaymentMonth['totalPenality'] }}</td>
 				</tr>
 				<tr class="arcedi_p">
 					<td class="table_arcedi_border p_report_arching">Despensas</td>
-					<td class="table_arcedi_border">0.00</td>
+					<td class="table_arcedi_border td_subtotal">{{ $totalPaymentMonth['totalLarder'] }}</td>
 				</tr>
 				<tr class="arcedi_p">
 					<td class="table_arcedi_border p_report_arching">Alquiler</td>
-					<td class="table_arcedi_border">0.00</td>
+					<td class="table_arcedi_border td_subtotal">{{ $totalPaymentMonth['totalRenta'] }}</td>
 				</tr>
 				<tr class="arcedi_p">
-					<td colspan="2"><p><b>Anticreticos</b></p></td>
+					<td><p><b>Anticreticos</b></p></td>
+					<td class="table_arcedi_border td_total"><b>{{ $totalPaymentAnti['granTotal'] }}</b></td>
 				</tr>
 				<tr class="arcedi_p">
 					<td class="table_arcedi_border p_report_arching">Multas</td>
-					<td class="table_arcedi_border">0.00</td>
+					<td class="table_arcedi_border td_subtotal">{{ $totalPaymentAnti['totalPenality'] }}</td>
 				</tr>
 				<tr class="arcedi_p">
 					<td class="table_arcedi_border p_report_arching">Despensas</td>
-					<td class="table_arcedi_border">0.00</td>
+					<td class="table_arcedi_border td_subtotal">{{ $totalPaymentAnti['totalLarder'] }}</td>
 				</tr>
 				<tr class="arcedi_p">
-					<td colspan="2"><p><b>Contratos Hora</b></p></td>
+					<td><p><b>Contratos Hora</b></p></td>
+					<td class="table_arcedi_border td_total"><b>{{ $totalContractTime['granTotal'] }}</b></td>
 				</tr>
 				<tr class="arcedi_p">
-					<td class="table_arcedi_border p_report_arching">Alquiler</td>
-					<td class="table_arcedi_border">0.00</td>
+					<td><p><b>Contratos Anticreticos</b></p></td>
+					<td class="table_arcedi_border td_total"><b>{{ $totalContractAnti['granTotal'] }}</b></td>
 				</tr>
 				<tr class="arcedi_p">
-					<td colspan="2"><p><b>Contratos Anticreticos</b></p></td>
+					<td><p><b>Contratos Alquiler</b></p></td>
+					<td class="table_arcedi_border td_total"><b>{{ $totalContractMonth['granTotal'] }}</b></td>
 				</tr>
 				<tr class="arcedi_p">
-					<td class="table_arcedi_border p_report_arching">Anticreticos</td>
-					<td class="table_arcedi_border">0.00</td>
+					<td><p><b>Pagos Extra</b></p></td>
+					<td class="table_arcedi_border td_total"><b>{{ $totalExtra['granTotal'] }}</b></td>
 				</tr>
 				<tr class="arcedi_p">
-					<td colspan="2"><p><b>Contratos Alquiler</b></p></td>
-				</tr>
-				<tr class="arcedi_p">
-					<td class="table_arcedi_border p_report_arching">Garantias</td>
-					<td class="table_arcedi_border">0.00</td>
-				</tr>
-				<tr class="arcedi_p">
-					<td colspan="2"><p><b>Gastos</b></p></td>
-				</tr>
-				<tr class="arcedi_p">
-					<td class="table_arcedi_border p_report_arching">Gastos</td>
-					<td class="table_arcedi_border">0.00</td>
+					<td><p><b>Gastos</b></p></td>
+					<td class="table_arcedi_border td_total" style="color: red;"><b>-{{ $totalOutgo['granTotal'] }}</b></td>
 				</tr>
 				<tr class="arcedi_p">
 					<td class="table_arcedi_border"><p><b style="text-transform: uppercase;">Gran Total</b></p></td>
-					<td class="table_arcedi_border">0.00</td>
+					<td class="table_arcedi_border td_total"><b>{{ $granTOTAL }}</b></td>
 				</tr>
 			</table>
 			<div style="height: 20px;"></div>

@@ -75,3 +75,13 @@
 	margin-left: 15px !important;
 	font-style: italic;
 }
+
+.td_total{
+	text-align: right;
+	margin-right: 5px !important;
+}
+
+.td_subtotal{
+	text-align: right;
+	margin-right: 50px !important;
+}

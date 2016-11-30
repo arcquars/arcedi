@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class PaymentA extends Model
 {
@@ -14,12 +15,12 @@ class PaymentA extends Model
 	
 	public static function archingAntiBeetwen($dateStart, $dateEnd){
 		$granTotal = PaymentA::where('payment_date', '>=', $dateStart)->where('payment_date', '<=', $dateEnd)->sum('total');
-		$totalPenality = PaymentA::where('payment_date', '>=', $dateStart)->where('payment_date', '<=', $dateEnd)->sum('penalty_fee');
+		$totalPenality = PaymentA::select(DB::raw('sum(penalty_fee*penalty_day) as penalty_fee'))->where('payment_date', '>=', $dateStart)->where('payment_date', '<=', $dateEnd)->first();
 		$totalLarder = PaymentA::where('payment_date', '>=', $dateStart)->where('payment_date', '<=', $dateEnd)->sum('payment_larder');
 	
 		return array(
 				"granTotal" => $granTotal,
-				"totalPenality" => $totalPenality,
+				"totalPenality" => $totalPenality->penalty_fee,
 				"totalLarder" => $totalLarder );
 	}
 }
