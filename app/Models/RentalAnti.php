@@ -26,6 +26,7 @@ class RentalAnti extends Model
 				'contract.per_id',
 				'contract.contract_id',
 				'rental_anti.anticretico',
+				'rental_anti.larder_id',
 				'rental_anti.date_payment_warranty',
 				'rental_anti.date_admission',
 				'rental_anti.date_end',

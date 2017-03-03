@@ -60,9 +60,16 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/admin/getEnvImages/{env_id?}', 'AdminController@getEnvImages');
     Route::get('/admin/endContract/{env_id?}', 'AdminController@actionEndContract');
 
-    //Route::get('/person', 'PersonController@show');
+    Route::get('/person/{ci}', 'PersonController@show');
 //    Route::resource('/person', 'PersonController');
     Route::get('/person/getPerson', 'PersonController@getPerson');
+
+    Route::get('/person', 'PersonController@index');
+    Route::post('/person/create', array('as' => 'person.create','uses' => 'PersonController@create'));
+    Route::post('/person/update', array('as' => 'person.update','uses' => 'PersonController@update'));
+    Route::post('/person/getPersonById/{id}', array('as' => 'person.getPersonById','uses' => 'PersonController@getPersonById'));
+    Route::post('/person/validDeletePerson/{pre_id}', array('as' => 'person.validDeletePerson','uses' => 'PersonController@validDeletePerson'));
+    Route::post('/person/deletePerson/{pre_id}', array('as' => 'person.deletePerson','uses' => 'PersonController@deletePerson'));
 
     Route::get('/env', 'EnvironmentController@index');
     Route::get('/env/new', 'EnvironmentController@newEnv');

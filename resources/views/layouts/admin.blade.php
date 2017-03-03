@@ -30,6 +30,7 @@
 		<div class="container">
 			<nav id="navbar" class="navbar navbar-default">
 				<div class="container-fluid">
+
 					<div class="navbar-header">
 						<button type="button" class="navbar-toggle" data-toggle="collapse"
 							data-target="bs-example-navbar-collapse-12">
@@ -219,8 +220,35 @@
 
             <label class="col-sm-2 control-label" for="despensas">Despensas:</label>
 			<div class="col-sm-3">
-                <input type='number' min="0" max="99999999" step='0.01' id="despensas" class="form-control" placeholder='0.00' />
+                <input type='number' min="0" max="99999999" step='0.01' id="despensas" class="form-control" placeholder='0.00' readonly />
 				<em class="error_text_arcedi error_despensas"></em>
+            </div>
+        </div>
+        <h4 class="arcedu_title1">Despensas</h4>
+        <div class="form-group">
+            <label class="col-sm-4 control-label" for="num_person_may">Personas mayores:</label>
+			<div class="col-sm-3">
+                <input type='number' min="0" max="10" step='0' id="num_person_may" class="form-control" placeholder='0' onchange='updateLarder();' />
+				<em class="error_text_arcedi error_num_person_may"></em>
+            </div>
+
+            <label class="col-sm-2 control-label" for="despensas_may">Des. Per. May:</label>
+			<div class="col-sm-3">
+                <input type='number' min="0" max="999" step='0.01' id="despensas_may" class="form-control" placeholder='0.00' onchange='updateLarder();' />
+				<em class="error_text_arcedi error_despensas_may"></em>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label" for="num_person_men">Personas menores:</label>
+			<div class="col-sm-3">
+                <input type='number' min="0" max="10" step='0' id="num_person_men" class="form-control" placeholder='0' onchange='updateLarder();'/>
+				<em class="error_text_arcedi error_num_person_men"></em>
+            </div>
+
+            <label class="col-sm-2 control-label" for="despensas_men">Des. Per. Men:</label>
+			<div class="col-sm-3">
+                <input type='number' min="0" max="999" step='0.01' id="despensas_men" class="form-control" placeholder='0.00' onchange='updateLarder();'/>
+				<em class="error_text_arcedi error_despensas_men"></em>
             </div>
         </div>
 		<div class="modal-footer">
@@ -619,10 +647,37 @@
 							<div class="col-sm-7"></div>
             				<label class="col-sm-2 control-label" for="despensas">Despensas Bs:</label>
 							<div class="col-sm-3">
-                				<input type='number' min="0" max="99999999" step='0.01' id="despensas" class="form-control" placeholder='0.00' />
+                				<input type='number' min="0" max="99999999" step='0.01' id="despensas" class="form-control" placeholder='0.00' readonly />
 								<em class="error_text_arcedi error_despensas"></em>
             				</div>
         				</div>
+        				<h4 class="arcedu_title1">Despensas</h4>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="num_person_may">Personas mayores:</label>
+							<div class="col-sm-3">
+								<input type='number' min="0" max="10" step='0' id="num_person_may" class="form-control" placeholder='0' onchange='updateLarder();' />
+								<em class="error_text_arcedi error_num_person_may"></em>
+							</div>
+
+							<label class="col-sm-2 control-label" for="despensas_may">Des. Per. May:</label>
+							<div class="col-sm-3">
+								<input type='number' min="0" max="999" step='0.01' id="despensas_may" class="form-control" placeholder='0.00' onchange='updateLarder();' />
+								<em class="error_text_arcedi error_despensas_may"></em>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="num_person_men">Personas menores:</label>
+							<div class="col-sm-3">
+								<input type='number' min="0" max="10" step='0' id="num_person_men" class="form-control" placeholder='0' onchange='updateLarder();'/>
+								<em class="error_text_arcedi error_num_person_men"></em>
+							</div>
+
+							<label class="col-sm-2 control-label" for="despensas_men">Des. Per. Men:</label>
+							<div class="col-sm-3">
+								<input type='number' min="0" max="999" step='0.01' id="despensas_men" class="form-control" placeholder='0.00' onchange='updateLarder();'/>
+								<em class="error_text_arcedi error_despensas_men"></em>
+							</div>
+						</div>
       				</div>
 				<div class="modal-footer">
             		<button type="button" class="btn btn-default btn-close">Cancelar</button>

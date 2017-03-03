@@ -69,16 +69,7 @@ class EnvironmentController extends Controller
         });
         $grid->orderBy('env_id', 'asc');
         $grid->paginate(10);
-        /*
-         * $grid->row(function ($row) {
-         * if ($row->cell('type')->value == 1) {
-         * $row->style("background-color:#CCFF66");
-         * } else{
-         * $row->cell('type')->style("font-weight:bold");
-         * $row->style("color:#f00");
-         * }
-         * });
-         */
+
         return view('environment.home', compact('filter', 'grid'));
     }
 
@@ -108,13 +99,20 @@ class EnvironmentController extends Controller
         }else{
             $env = new Environment();
         }
+        $typeUse = \Config::get('arcedu.arcedi_type_use');
+        if($typeUse['living_place'] == $request->type_use)
+            $env->type_use = 'living_place';
+        if($typeUse['commercial'] == $request->type_use)
+            $env->type_use = 'commercial';
+        if($typeUse['time'] == $request->type_use)
+            $env->type_use = 'time';
 
         $env->type = $request->type;
-        $env->type_use = $request->type_use;
         $env->area = $request->area;
         $env->flat = $request->flat;
         $env->code = $request->code;
         $env->rental = $request->rental;
+        $env->detail_env = $request->detail_env;
 
         $env->save();
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Arching;
 use App\Models\Expense;
 use App\Models\Extra;
+use App\Models\Larder;
 use App\Models\PaymentM;
 use App\Models\PaymentA;
 use App\Models\Person;
@@ -148,6 +149,7 @@ class PdfController extends Controller
 			'arcedi_contract_owner_profesion' => \Config::get('arcedu.arcedi_contract_owner_profesion'),
 			'arcedi_contract_owner_ci' => \Config::get('arcedu.arcedi_contract_owner_ci'),
 			'arcedi_contract_owner_address' => \Config::get('arcedu.arcedi_contract_owner_address'),
+			'arcedi_contract_detail_env' => \Config::get('arcedu.arcedi_detil_env'),
 		);
 		$typeUse = $environment->type_use;
 
@@ -160,7 +162,7 @@ class PdfController extends Controller
 					$pdf->loadHTML($view);
 					return $pdf->stream('contractMonth');
 				}else{
-					$view =  \View::make('pdf.contractCommercialAnti', compact('person', 'arcedi', '1', 'piso'))->render();
+					$view =  \View::make('pdf.contractCommercialAnti', compact('person', 'arcedi', 'environment', 'piso'))->render();
 					$pdf = \App::make('dompdf.wrapper');
 					$pdf->loadHTML($view);
 					return $pdf->stream('contractAnti');
@@ -169,13 +171,21 @@ class PdfController extends Controller
 			case "living_place":
 				if(isset($environment->rental_m_id)){
 					$rentalMonth = RentalMonth::getById($environment->rental_m_id);
-					$view =  \View::make('pdf.contractLivingMonth', compact('person', 'arcedi', 'environment', 'piso', 'rentalMonth'))->render();
+					$larder = null;
+					if(isset($rentalMonth->larder_id)){
+						$larder = Larder::find($rentalMonth->larder_id);
+					}
+					$view =  \View::make('pdf.contractLivingMonth', compact('person', 'arcedi', 'environment', 'piso', 'rentalMonth', 'larder'))->render();
 					$pdf = \App::make('dompdf.wrapper');
 					$pdf->loadHTML($view);
 					return $pdf->stream('contractMonth');
 				}else{
 					$rentalAnti = RentalAnti::getRentalAntiById($environment->anticrisis_id);
-					$view =  \View::make('pdf.contractLivingAnti', compact('person', 'arcedi', 'environment', 'piso', 'rentalAnti'))->render();
+					$larder = null;
+					if(isset($rentalAnti->larder_id)){
+						$larder = Larder::find($rentalAnti->larder_id);
+					}
+					$view =  \View::make('pdf.contractLivingAnti', compact('person', 'arcedi', 'environment', 'piso', 'rentalAnti', 'larder'))->render();
 					$pdf = \App::make('dompdf.wrapper');
 					$pdf->loadHTML($view);
 					return $pdf->stream('contractAnti');

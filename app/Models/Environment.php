@@ -41,6 +41,7 @@ class Environment extends Model
                 'environments.env_id',
                 'environments.flat',
                 'environments.area',
+                'environments.detail_env',
                 'environments.type_use',
                 'environments.code')
             ->where('environments.env_id', $env_id)->where('contract.status', "Vigente")->first();

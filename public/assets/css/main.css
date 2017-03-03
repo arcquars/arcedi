@@ -39,6 +39,21 @@ a {
   box-shadow: none;
   color: #F7FF03;
 }
+
+.btn.btn-secundary {
+  background-color: #25ba83;
+  border-color: #285238;
+  color: #fff;
+}
+.btn.btn-secundary:hover,
+.btn.btn-secundary.active {
+  background-color: #388659;
+  border-color: #25ba83;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
 a:hover,
 a:focus {
   color: #474B03;

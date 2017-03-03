@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Arcedi\Utils;
 use App\Models\EnvImages;
 use App\Models\Extra;
+use App\Models\Larder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -167,9 +168,16 @@ class AdminController extends Controller {
 			$this->populatePerson ( $person, $datos );
 		}
 		$person->save ();
+
+		// Crear despensas
+		$larder = new Larder();
+		$this->populateLarder($larder, $datos);
+		$larder->save();
+
 		// Crear Mes
 		$rentalMonth = new RentalMonth ();
 		$this->populateRentalMonth ( $rentalMonth, $datos );
+		$rentalMonth->larder_id = $larder->id;
 		$rentalMonth->save ();
 		// Crear Contrato por mes
 		$contract = new Contract ();
@@ -193,9 +201,16 @@ class AdminController extends Controller {
 			$this->populatePerson ( $person, $datos );
 		}
 		$person->save ();
+
+		// Crear despensas
+		$larder = new Larder();
+		$this->populateLarder($larder, $datos);
+		$larder->save();
+
 		// Crear rental anticretico
 		$rentalAnti = new RentalAnti ();
 		$this->populateRentalAnti ( $rentalAnti, $datos );
+		$rentalAnti->larder_id = $larder->id;
 		$rentalAnti->save ();
 		// Crear Contrato anticrisis
 		$contract = new Contract ();
@@ -592,6 +607,16 @@ class AdminController extends Controller {
 		$rentalMonth->payment = $datos ['monthPayment'];
 		$rentalMonth->larder = $datos ['despensas'];
 	}
+
+	private function populateLarder($larder, $datos) {
+		$larder->num_person_may= $datos ['num_person_may'];
+		$larder->num_person_men= $datos ['num_person_men'];
+		$larder->larder_may= $datos ['despensas_may'];
+		$larder->larder_men= $datos ['despensas_men'];
+		$larder->total= $datos ['despensas'];
+
+	}
+
 	private function populateRentalAnti($rentalAnti, $datos) {
 		$rentalAnti->date_admission = date_create_from_format ( 'Y-m-d', $datos ['dateStart'] );
 		$rentalAnti->date_end = date_create_from_format ( 'Y-m-d', $datos ['dateEnd'] );

@@ -23,7 +23,12 @@ return  [
 	'arcedi_type_use' => array(
 		'commercial' => 'Comercial',
 		'living_place' => 'Vivienda',
-		'time' => 'Tiempo')
-	//'arcedi_contract_owner_' => ''
+		'time' => 'Tiempo'),
+	'arcedi_detil_env' => array(
+		'a' => array('dormitorios' => 2, 'banios' => 2, 'living_comedor' => 1, 'cocina' => 1, 'lavanderia' => '1'),
+		'b' => array('dormitorios' => 2, 'banios' => 1, 'living_comedor' => 1, 'cocina' => 1, 'lavanderia' => '1'),
+		'c' => array('dormitorios' => 1, 'banios' => 1, 'living_comedor' => 1, 'cocina' => 1, 'lavanderia' => '1'),
+	)
+
 
 ];

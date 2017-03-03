@@ -318,6 +318,11 @@ ContractMonthView = Backbone.View.extend({
          this.model.set({'dateEnd': $(this.el).find('input#dateEnd').val()});
          this.model.set({'monthPayment': $(this.el).find('input#monthPayment').val()});
          this.model.set({'despensas': $(this.el).find('input#despensas').val()});
+
+		 this.model.set({'num_person_may': $(this.el).find('input#num_person_may').val()});
+		 this.model.set({'despensas_may': $(this.el).find('input#despensas_may').val()});
+		 this.model.set({'num_person_men': $(this.el).find('input#num_person_men').val()});
+		 this.model.set({'despensas_men': $(this.el).find('input#despensas_men').val()});
          
          $.each($(this.el).find(".form-control"), function(key, value){
         	 $(value).removeClass("error_input");
@@ -389,35 +394,50 @@ var PaymentMonthView = Backbone.View.extend({
 	    this.render();
 	  },
 	  show: function(){
+		  //if(maxDateIf.isAfter(minDateIf)){
+			//  alert("if");
+		  //}else{
+			//  alert("else");
+		  //}
 		  this.$el.modal('show');
+
 		  var modelA =  this.model;
 		  var view = this;
 		  $(this.$el).on('shown.bs.modal', function (e) {
 			  var dateRange = modelA.get("dateStart1");
-        var dateDd = moment(modelA.get("dateStart"), "YYYY-MM-DD");
+			  var dateDd = moment(modelA.get("dateStart"), "YYYY-MM-DD");
+				dateDd.add(1, 'month').calendar();
+			  var maxDateIf = moment($("#dateEndContract").val(), "YYYY-MM");
+			  if(maxDateIf.diff(dateDd) < 0){
+				  view.$el.modal('hide');
+				  alert("No puede hacer mas pagos por que el contrato termino.");
+				  return;
+			  }
 			  if($('.datetimepickerEndM').data("DateTimePicker") !== undefined){
 				  $('.datetimepickerEndM').data("DateTimePicker").destroy();
 				  $('.datetimepickerEndM').datetimepicker({
 					  	locale: moment.locale('es'),
 		    	    	format: 'YYYY-MM',
 		    	    	viewMode: "months",
-		    	    	defaultDate: dateRange,
+		    	    	//defaultDate: dateRange,
 		    	    	maxDate: moment($("#dateEndContract").val(), "YYYY-MM"),
-		    	    	minDate: dateDd.add(1, 'month').calendar()
+		    	    	minDate: dateDd
 				  });
 			  }else{
+				  //alert(moment($("#dateEndContract").val(), "YYYY-MM").calendar()+" || "+dateDd.add(1, 'month').calendar());
 				  $('.datetimepickerEndM').datetimepicker({
 					  	locale: moment.locale('es'),
 		    	    	format: 'YYYY-MM',
 		    	    	viewMode: "months",
-		    	    	defaultDate: dateRange,
+		    	    	//defaultDate: dateRange,
 		    	    	maxDate: moment($("#dateEndContract").val(), "YYYY-MM"),
-		    	    	minDate: dateDd.add(1, 'month').calendar()
+		    	    	minDate: dateDd
 				  });
 
 			  }
 			  $(".datetimepickerEndM").on("dp.change", function(e) {
 				  var number_month = numberMonth(moment(modelA.get("dateStart"), "YYYY-MM-DD"), e.date);
+
 				  setNumberMonth(number_month);
 				  setTotalRentalMonth(moment(modelA.get("dateStart"), "YYYY-MM-DD"), number_month, modelA.get("payment"));
 				  setTotalLarderMonth(moment(modelA.get("dateStart"), "YYYY-MM-DD"), number_month, modelA.get("larder"));
@@ -728,6 +748,11 @@ var ContractAntiView = Backbone.View.extend({
 		  this.model.set({'anticretico': $(this.el).find('input#anticretico').val()});
 		  this.model.set({'penalty_fee': $(this.el).find('input#penalty_fee').val()});
 		  this.model.set({'despensas': $(this.el).find('input#despensas').val()});
+
+		  this.model.set({'num_person_may': $(this.el).find('input#num_person_may').val()});
+		  this.model.set({'despensas_may': $(this.el).find('input#despensas_may').val()});
+		  this.model.set({'num_person_men': $(this.el).find('input#num_person_men').val()});
+		  this.model.set({'despensas_men': $(this.el).find('input#despensas_men').val()});
 		  
 		  $.each($(this.el).find(".form-control"), function(key, value){
 	        	 $(value).removeClass("error_input");
@@ -944,14 +969,18 @@ function bindingVM(model, inputs, data){
 }
 
 function numberMonth(dateStart, dateEnd){
-	var date11 = new Date(dateStart.year(), dateStart.month(), "1"); // "18/03/2015", month is 0-index
-	var date22 = new Date(dateEnd.year(), dateEnd.month(), "1"); // "20/03/2015"
-	  var msDiff = date22 - date11; // 172800000, this is time in milliseconds
-	  var monthAux =(msDiff / 1000 / 60 / 60 / 24 / 30);
-	  if(monthAux >= 0 && monthAux <1)
-		  return 1;
-	  else
-		  return Math.floor(monthAux);
+	//var date11 = new Date(dateStart.year(), dateStart.month(), "1"); // "18/03/2015", month is 0-index
+	//var date22 = new Date(dateEnd.year(), dateEnd.month(), "1"); // "20/03/2015"
+	//alert(dateStart.format("DD/MMMM/YYYY")+" || "+ dateEnd.format("DD/MMMM/YYYY"));
+	//alert(moment(dateEnd).diff(moment(dateStart), 'month'));
+	//alert("pedro123:: "+date11+" || "+date22);
+	//  var msDiff = date22 - date11; // 172800000, this is time in milliseconds
+	//  var monthAux =(msDiff / 1000 / 60 / 60 / 24 / 30);
+	//  if(monthAux >= 0 && monthAux <1)
+	//	  return 1;
+	//  else
+	//	  return Math.floor(monthAux);
+	return moment(dateEnd).diff(moment(dateStart), 'month');
 }
 
 function calcGranTotal(startDate, number_month1, paymentMonth, paymentLarder, paymentFee, penalty_fee){
@@ -1236,4 +1265,28 @@ function productCodeIsValid(value){
 				return false;
 		}
 	});
+}
+
+
+function updateLarder(){
+	var num_person_may = 0;
+	var num_person_men = 0;
+	var larder_may = 0;
+	var larder_men = 0;
+
+	if($.isNumeric($("#num_person_may").val()))
+		num_person_may = parseFloat($("#num_person_may").val());
+	if($.isNumeric($("#num_person_men").val()))
+		num_person_men = parseFloat($("#num_person_men").val());
+	if($.isNumeric($("#despensas_may").val()))
+		larder_may = parseFloat($("#despensas_may").val());
+	if($.isNumeric($("#despensas_men").val()))
+		larder_men = parseFloat($("#despensas_men").val());
+
+	var total = (num_person_may*larder_may) + (num_person_men*larder_men);
+
+	console.log("gran total despensas:: "+total);
+
+	$("#despensas").val(total);
+
 }

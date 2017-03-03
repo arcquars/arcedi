@@ -25,7 +25,7 @@ use App\Arcedi\Utils;
 
                     {{ Form::label('type_use', 'Uso:') }}
                     @if($isEdit)
-                        {{ Form::text('type_use', $type_use, array('class' => 'form-control arcedi-select-disabled', "readonly")) }}
+                        {{ Form::text('type_use', $type_use, array('class' => 'form-control arcedi-select-disabled')) }}
                     @else
                         {{ Form::select('type_use', $arcedi_type_use, $env1->type_use, array('class' => 'form-control', 'placeholder' => 'Selecione un tipo de uso...')) }}
                     @endif
@@ -43,6 +43,10 @@ use App\Arcedi\Utils;
                     {{ Form::label('code', 'Codigo:') }}
                     {{ Form::text('code', $env1->code, array('class' => 'form-control', 'placeholder' => 'Ej. A-2 o 2-B')) }}
                     @if ($errors->has('code')) <p class="help-block arcedi-error">{{ $errors->first('code') }}</p> @endif
+
+                    {{ Form::label('detail_env', 'Tipo distribución:') }}
+                    {{ Form::select('detail_env', ['a' => 'a', 'b' => 'b', 'c' => 'c'], $env1->detail_env, array('class' => 'form-control', 'placeholder' => 'Selecione un tipo ...')) }}
+                    @if ($errors->has('detil_env')) <p class="help-block arcedi-error">{{ $errors->first('detail_env') }}</p> @endif
 
                     {{ Form::label('rental', 'Alquiler Mes:') }}
                     {{ Form::number('rental', $env1->rental, array('class' => 'form-control', 'placeholder' => 'alquiler', "step" => "0.01", "min" => "500", "max" => "900000")) }}

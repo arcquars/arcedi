@@ -21,15 +21,47 @@
     </p>
     <h6>ANTECEDENTES</h6>
     <ol class="ol_contract" type="I">
-      <li>Que la <b>{{ $arcedi['arcedi_contract_owner_name'] }}</b> es PROPIETARIO, de un departamento vivienda , situado en <b>{{ $piso }}</b> del edificio <b>{{ $arcedi['arcedi_nameCompany'] }}</b> con codigo <b>{{ $environment->code }}</b>. de <b>{{ $arcedi['arcedi_address'] }}</b> de la ciudad de Cochabamba con una superficie de <b>{{ $environment->area }}</b> metros cuadrados.</li>
+      <li>Que la <b>{{ $arcedi['arcedi_contract_owner_name'] }}</b> es PROPIETARIO, de un departamento vivienda , situado en <b>{{ $piso }}</b> del edificio <b>{{ $arcedi['arcedi_nameCompany'] }}</b> con codigo <b>{{ $environment->code }}</b>. de <b>{{ $arcedi['arcedi_address'] }}</b> de la ciudad de Cochabamba con una superficie de <b>{{ $environment->area }}</b> metros cuadrados y consta de los siguientes ambientes
+        <?php
+
+        if($environment->detail_env == "a"){
+          print_r($arcedi['arcedi_contract_detail_env']['a']);
+          echo "<p>".$arcedi['arcedi_contract_detail_env']['a']['dormitorios']." Habitaciones</p>";
+          echo "<p>".$arcedi['arcedi_contract_detail_env']['a']['living_comedor']." Living comedor</p>";
+          echo "<p>".$arcedi['arcedi_contract_detail_env']['a']['banios']." Banios</p>";
+          echo "<p>".$arcedi['arcedi_contract_detail_env']['a']['cocina']." Cocina</p>";
+          echo "<p>".$arcedi['arcedi_contract_detail_env']['a']['lavanderia']." Lavanderia (uso comun)</p>";
+        }
+        if($environment->detail_env == "b"){
+          echo "<p>".$arcedi['arcedi_contract_detail_env']['b']['dormitorios']."  Habitaciones</p>";
+          echo "<p>".$arcedi['arcedi_contract_detail_env']['b']['living_comedor']." Living comedor</p>";
+          echo "<p>".$arcedi['arcedi_contract_detail_env']['b']['banios']." Banios</p>";
+          echo "<p>".$arcedi['arcedi_contract_detail_env']['b']['cocina']." Cocina</p>";
+          echo "<p>".$arcedi['arcedi_contract_detail_env']['b']['lavanderia']." Lavanderia (uso comun)</p>";
+        }
+        if($environment->detail_env == "c"){
+          echo "<p>".$arcedi['arcedi_contract_detail_env']['c']['dormitorios']."  Habitaciones</p>";
+          echo "<p>".$arcedi['arcedi_contract_detail_env']['c']['living_comedor']." Living comedor</p>";
+          echo "<p>".$arcedi['arcedi_contract_detail_env']['c']['banios']." Banios</p>";
+          echo "<p>".$arcedi['arcedi_contract_detail_env']['c']['cocina']." Cocina</p>";
+          echo "<p>".$arcedi['arcedi_contract_detail_env']['c']['lavanderia']." Lavanderia (uso comun)</p>";
+        }
+        ?>
+      </li>
       <li>Ambas partes  han concertado  que el presente contrato de alquiler de dicho local se regulará de acuerdo con las siguientes clausulas.</li>
     </ol>
     <h6>CLAUSULAS</h6>
     <h6>OBJETO, CONTENIDO Y DESTINO</h6>
     <p class="p_contrat"><b>PRIMERA.-</b> El PROPIETARIO deja constancia que el inmueble a que se refiere  el contrato, se encuentra desocupado, en buen estado de conservación y habitabilidad y sin mayor desgaste que el producido por el uso normal y ordinario y con todas sus instalaciones funcionales  en óptimo estado de uso y rendimiento, que ha sido vista, examinada y encontrada a su entera satisfacción por el INQUILINO, quien la usará como vivienda.</p>
     <p class="p_contrat">Este destino no podrá ser alterado sin consentimiento por escrito del PROPIETARIO. El incumplimiento de esta obligación dará derecho al PROPIETARIO para resolver de pleno derecho el contrato.</p>
-    <p class="p_contrat"><b>SEGUNDA.-</b>  Por el presente contrato El PROPIETARIO se obliga a ceder el uso de dicho inmueble a favor del INQUILINO, a título de ANTICRETICO. Por su parte el INQUILINO se obliga a pagar al  PROPIETARIO, el monto pactado en la cláusula en la forma y oportunidad convenidas.</p>
-    <p class="p_contrat">Se deja expresa constancia que,  EL INQUILINO  no podrá  ceder, transferir, ni subalquilar, total o parcialmente a terceros.</p>
+    
+    @if(isset($larder))
+      <p class="p_contrat"><b>SEGUNDA.-</b>  Por el presente contrato El PROPIETARIO se obliga a ceder el uso de dicho inmueble a favor del INQUILINO, a título de ALQUILER. Por su parte el INQUILINO se obliga a pagar al  PROPIETARIO, el monto pactado en la cláusula en la forma y oportunidad convenidas.</p>
+      <p class="p_contrat">Se deja expresa constancia que el inmueble es [ara uso y vivienda de {{$larder->num_person_may}} personas mayores de edad y {{$larder->num_person_men}} personas menores de edad. EL INQUILINO  no podrá  ceder, transferir, ni subalquilar, total o parcialmente a terceros.</p>
+    @else
+      <p class="p_contrat"><b>SEGUNDA.-</b>  Por el presente contrato El PROPIETARIO se obliga a ceder el uso de dicho inmueble a favor del INQUILINO, a título de ALQUILER. Por su parte el INQUILINO se obliga a pagar al  PROPIETARIO, el monto pactado en la cláusula en la forma y oportunidad convenidas.</p>
+      <p class="p_contrat">Se deja expresa constancia que,  EL INQUILINO  no podrá  ceder, transferir, ni subalquilar, total o parcialmente a terceros.</p>
+    @endif
     <h6>DURACIÓN</h6>
     <p class="p_contrat"><b>TERCERA.-</b> El plazo de duración del alquiler será por UN ano forzoso, y  comenzará a partir del  <?= $rentalMonth->date_admission; ?>  y  terminará en <?= $rentalMonth->date_end; ?>  sin necesidad de aviso previo.
       El Contrato podrá renovarse a su vencimiento, si ambas partes están de acuerdo, para lo cual el INQUILINO deberán informar al  PROPIETARIO de su deseo de renovar el contrato, por escrito con una anticipación no menor de 30 días calendarios a la fecha prevista para la renovación, debiendo constar ésta de documento escrito.</p>
